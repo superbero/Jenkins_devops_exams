@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name:  nginx-service
+spec:
+  selector:
+    app:  nginx
+  type:  LoadBalancer 
+  ports:
+  - name:  nginx-loadbalancer
+    port:  8080
+    protocol: TCP
+    targetPort:  8080

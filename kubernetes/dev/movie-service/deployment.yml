@@ -1,49 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name:  movie_service
-  namespace: default
+  name:  movie-svc-deploy
+  namespace: dev
   labels:
-    app:  movie_service
+    app:  movie-svc-deploy
 spec:
   selector:
     matchLabels:
-      app: movie_service
+      app: movie-svc-deploy
   replicas: 1
   strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
     type: RollingUpdate
   template:
     metadata:
       labels:
-        app:  movie_service
+        app:  movie-svc-deploy
     spec:
       # initContainers:
         # Init containers are exactly like regular containers, except:
           # - Init containers always run to completion.
           # - Each init container must complete successfully before the next one starts.
       containers:
-      - name:  movie_service
+      - name:  movie-svc-deploy
         image:  superbero/movie_service:latest
-        resources:
-          requests:
-            cpu: 100m
-            memory: 100Mi
-          limits:
-            cpu: 100m
-            memory: 100Mi
+        command: ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
         envFrom:
           - configMapRef:
               name: movie-service-config
-        ports:
-        - containerPort:  8081
-          name:  movie_service
-        volumeMounts:
-        - name: movie_db
-          mountPath: /app/
-      volumes:
-        - name: movie-service-disk
-          hostPath:
-            path: ./movie-service/
+       

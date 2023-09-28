@@ -4,7 +4,7 @@ metadata:
   name: cast-service-config
   namespace: dev
   labels:
-    app: cast-service
+    app: cast-service-config
 data:
-  DATABASE_URI: "postgresql://cast_db_username:cast_db_password@cast_db/cast_db_dev"
+  DATABASE_URI: "postgresql://cast_db_username:cast_db_password@cast-db-service/postgres-cast-db"
 

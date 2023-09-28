@@ -2,11 +2,12 @@ kind: Service
 apiVersion: v1
 metadata:
   name:  movie-service
+  namespace: dev
 spec:
   selector:
-    app:  movie-db
+    app:  movie-svc-deploy
   type:   NodePort
   ports:
-  - name:  movide_db_dev
+  - name:  tcp
     port:  8001
     targetPort:  8000

@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: cast_db_dev
+  name: cast-db-service
   namespace: dev
 spec:
   selector:
-    app: cast_db_dev
+    app: cast-svc-deploy
   type: ClusterIP
   ports:
-  - name: cast_db_dev
+  - name: cast-db-service
     protocol: TCP
     port: 8002
     targetPort: 8000 

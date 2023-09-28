@@ -5,7 +5,7 @@ metadata:
   namespace: dev
 spec:
   selector:
-    app: cast-db
+    app: postgres-cast-db
   type: ClusterIP
   ports:
   - name: cast-service-tcp
@@ -24,7 +24,7 @@ metadata:
   namespace: dev
 spec:
   selector:
-    app: movie-db
+    app: postgres-movie-db
   type: ClusterIP
   ports:
   - name: movie-service-tcp

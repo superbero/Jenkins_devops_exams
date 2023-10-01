@@ -6,7 +6,7 @@ metadata:
   labels:
     app: postgres-data-movie
 spec:
-  storageClassName: standard
+  storageClassName: default
   accessModes:
     - ReadWriteOnce
   resources:
@@ -26,7 +26,7 @@ metadata:
   labels:
     app: postgres-data-cast
 spec:
-  storageClassName: standard
+  storageClassName: default
   accessModes:
   - ReadWriteOnce
   resources:

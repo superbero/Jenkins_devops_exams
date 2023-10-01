@@ -4,12 +4,12 @@ metadata:
   name: postgres-data
 spec:
   capacity:
-    storage: 10Gi
+    storage: 5Gi
   volumeMode: Filesystem
   hostPath:
-    path:  $HOME/data
+    path:  /home/ubuntu/volumes
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Recycle
-  storageClassName: standard
+  storageClassName: default
   

@@ -6,5 +6,5 @@ metadata:
   labels:
     app: cast-service-config
 data:
-  DATABASE_URI: "postgresql+psycopg2://cast_db_username:cast_db_password@postgres-cast-service/postgres-cast-db"
+  DATABASE_URI: "postgresql://cast:password@postgres-cast-service:5432/cast_db_dev"
 

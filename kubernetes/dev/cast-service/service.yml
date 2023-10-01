@@ -6,7 +6,7 @@ metadata:
 spec:
   selector:
     app: cast-svc-deploy
-  type: ClusterIP
+  type: NodePort
   ports:
   - name: cast-db-service
     protocol: TCP

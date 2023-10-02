@@ -4,6 +4,6 @@ metadata:
   name: movie-service-config
   namespace: dev
 data:
-  #DATABASE_URI: "postgresql://movie_db_username:movie_db_password@movie_db/movie_db_dev"
-  DATABASE_URI: "postgresql://movie:password@postgres-movie-service:5432/movie_db_dev"
+  DATABASE_URI: "postgresql://movie_db_username:movie_db_password@postgres-movie-service:5432/movie_db_dev"
+  #DATABASE_URI: "postgresql://movie:password@postgres-movie-service:5432/movie_db_dev"
   CAST_SERVICE_HOST_URL: "http://cast-db-service:8000/api/v1/casts/"

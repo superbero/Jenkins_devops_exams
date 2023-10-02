@@ -9,7 +9,7 @@ spec:
   hostPath:
     path:  /Users/admin/data
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   persistentVolumeReclaimPolicy: Recycle
   storageClassName: standard
   

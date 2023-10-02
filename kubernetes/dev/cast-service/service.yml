@@ -9,7 +9,6 @@ spec:
   type: NodePort
   ports:
   - name: cast-db-service
-    protocol: TCP
     port: 8000
     targetPort: 8000 
     # If you set the `spec.type` field to `NodePort` and you want a specific port number,

@@ -6,7 +6,7 @@ metadata:
 spec:
   selector:
     app:  movie-svc-deploy
-  type:   NodePort
+  type:  ClusterIP
   ports:
   - name:  tcp
     port:  8000

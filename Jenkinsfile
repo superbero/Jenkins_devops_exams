@@ -2,13 +2,16 @@ pipeline {
     agent any
     environment {
         DOCKER_HUB_REGISTRY = "docker.io"
-        DOCKER_HUB_USERNAME = "superbero"
-        DOCKER_HUB_PASSWORD = credentials('docker-hub-credentials').password
+        DOCKER_HUB_USERNAME = credentials('docker-username')
+        DOCKER_HUB_PASSWORD = credentials('docker-password')
     }
     stages {
         stage("pre-build") {
             steps {
-                echo "login to docker hub"
+                scripts {
+                    sh "echo 'login to docker hub'"
+                }
+                
             }
         }
         stage("build") {

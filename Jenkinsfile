@@ -5,10 +5,10 @@ pipeline {
         // DOCKER_HUB_USERNAME = credentials('docker-credentials').username
         // DOCKER_HUB_PASSWORD = credentials('docker-credentials').password
     }
-    tools {
-        // Define the Docker tool installation named 'docker' (You may have to configure this in Jenkins)
-        docker 'docker'
-    }
+    // tools {
+    //     // Define the Docker tool installation named 'docker' (You may have to configure this in Jenkins)
+    //     docker 'docker'
+    // }
     stages {
         stage("pre-build") {
             steps {

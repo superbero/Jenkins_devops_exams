@@ -7,4 +7,3 @@ metadata:
     app: cast-service-config
 data:
   DATABASE_URI: "postgresql://cast:password@postgres-cast-service:5432/cast_db_dev"
-

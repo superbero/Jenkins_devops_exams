@@ -23,13 +23,13 @@ spec:
         envFrom:
           - configMapRef: 
               name: postgres-movie-configmap
-        # volumeMounts:
-        # - name: postgres-data-movie
-        #   mountPath: /var/lib/postgresql/data/ 
-      # volumes:
-      #   - name:  postgres-data-movie
-      #     persistentVolumeClaim: 
-      #       claimName: postgres-data-movie
+        volumeMounts:
+        - name: postgres-data-movie
+          mountPath: /var/lib/postgresql/data/ 
+      volumes:
+        - name:  postgres-data-movie
+          persistentVolumeClaim: 
+            claimName: postgres-data-movie
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -57,11 +57,11 @@ spec:
         envFrom:
           - configMapRef:
               name: postgres-cast-configmap
-        # volumeMounts:
-        # - name: postgres-data-cast
-        #   mountPath: /var/lib/postgresql/data/
-      # volumes:
-      #   - name: postgres-data-cast
-      #     persistentVolumeClaim:
-      #       claimName: postgres-data-cast
+        volumeMounts:
+        - name: postgres-data-cast
+          mountPath: /var/lib/postgresql/data/
+      volumes:
+        - name: postgres-data-cast
+          persistentVolumeClaim:
+            claimName: postgres-data-cast
           

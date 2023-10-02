@@ -7,9 +7,9 @@ spec:
     storage: 5Gi
   volumeMode: Filesystem
   hostPath:
-    path:  /home/ubuntu/volumes
+    path:  /Users/admin/data
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Recycle
-  storageClassName: default
+  storageClassName: standard
   

@@ -1,20 +1,20 @@
-pipeline{
-
+pipeline {
     agent any
     stages {
-        stage("pre-build"){
-        step('first step')
-        {
-            sh "echo 'test one'"
+        stage("pre-build") {
+            steps {
+                echo "test one"
+            }
         }
+        stage("build") {
+            steps {
+                echo "building"
+            }
         }
-        stage("build"){
-            echo "building"
-        }
-        stage("deploy"){
-
+        stage("deploy") {
+            steps {
+                // Add your deployment steps here
+            }
         }
     }
-    
-
 }

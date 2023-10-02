@@ -2,7 +2,10 @@ pipeline{
 
 agent any{
     stage("pre-build"){
-        step()
+        step('first step')
+        {
+            echo 'test one'
+        }
     }
 }
 }

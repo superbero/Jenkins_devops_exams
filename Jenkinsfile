@@ -1,11 +1,11 @@
 pipeline{
 
-agent any{
+    agent any
     stage("pre-build"){
         step('first step')
         {
-            echo 'test one'
+            sh "echo 'test one'"
         }
     }
-}
+
 }

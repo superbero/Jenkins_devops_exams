@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage("pre-build") {
             steps {
-                scripts {
+                script {
                     sh "echo 'login to docker hub'"
                 }
                 

@@ -14,6 +14,7 @@ pipeline {
             steps {
                 script {
                     sh "echo 'login to docker hub'"
+                    sh 'docker --version'
                     withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
                         sh "docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD $DOCKER_HUB_REGISTRY"
                     }

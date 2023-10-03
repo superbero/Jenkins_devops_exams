@@ -9,6 +9,7 @@ pipeline {
         // Define the Docker tool installation named 'docker' (You may have to configure this in Jenkins)
         dockerTool 'docker'
     }
+    
     stages {
         stage("pre-build") {
             steps {
@@ -17,7 +18,11 @@ pipeline {
                     // sh 'docker --version'
                     withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
                         // sh "docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD $DOCKER_HUB_REGISTRY"
-                        sh 'docker --version'
+                        withEnv(['docker=/Users/admin/.jenkins/tools/org.jenkinsci.plugins.docker.commons.tools.DockerTool/'])
+                        {
+                            sh 'docker --version'
+                        }
+                        
                     }
                 }
                 

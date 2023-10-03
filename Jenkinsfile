@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKER_HUB_REGISTRY = "docker.io"
-        docker = "/Users/admin/.jenkins/tools/org.jenkinsci.plugins.docker.commons.tools.DockerTool/"
+        docker = "/usr/local/bin/docker"
         // DOCKER_HUB_USERNAME = credentials('docker-credentials').username
         // DOCKER_HUB_PASSWORD = credentials('docker-credentials').password
     }

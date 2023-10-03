@@ -7,7 +7,7 @@ pipeline {
     }
     tools {
         // Define the Docker tool installation named 'docker' (You may have to configure this in Jenkins)
-        docker 'docker'
+        dockerTool 'docker'
     }
     stages {
         stage("pre-build") {

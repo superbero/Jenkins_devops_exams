@@ -28,9 +28,9 @@ pipeline {
         stage("build docker images") {
             steps {
                 echo "building movie-service image"
-                sh '$docker build -f movie-service/Dockerfile -t superbero/movie-service'
+                sh '$docker build -f movie-service/. -t superbero/movie-service:latest'
                 echo "building cast-service image"
-                sh '$docker build -f cast-service/Dockerfile -t superbero/cast-service'
+                sh '$docker build -f cast-service/. -t superbero/cast-service:latest'
             }
         }
         stage("deploy") {

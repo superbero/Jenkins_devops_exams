@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKER_HUB_REGISTRY = "docker.io"
+        docker = "/Users/admin/.jenkins/tools/org.jenkinsci.plugins.docker.commons.tools.DockerTool/"
         // DOCKER_HUB_USERNAME = credentials('docker-credentials').username
         // DOCKER_HUB_PASSWORD = credentials('docker-credentials').password
     }
@@ -18,11 +19,8 @@ pipeline {
                     // sh 'docker --version'
                     withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
                         // sh "docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD $DOCKER_HUB_REGISTRY"
-                        withEnv(['docker=/Users/admin/.jenkins/tools/org.jenkinsci.plugins.docker.commons.tools.DockerTool/'])
-                        {
-                            sh 'docker --version'
+                            sh '$docker --version'
                         }
-                        
                     }
                 }
                 

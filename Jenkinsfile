@@ -57,7 +57,7 @@ pipeline {
         stage("create namespace"){
             steps{
                 script{
-                    sh '''
+                    sh -e '''
                     namespaces=('dev' 'staging' 'prod')
                     echo 'create namespace dev prod staging'
                     for namespace in "${namespaces[@]}"

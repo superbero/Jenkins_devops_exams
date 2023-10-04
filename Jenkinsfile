@@ -50,8 +50,32 @@ pipeline {
             steps{
                 sh '''
                 echo 'config kubernetes'
-                kubectl version --short
+                $kubectl version --short
                 '''
+            }
+        }
+        stage("create namespace"){
+            steps{
+                script{
+                    sh '''
+                    echo 'create namespace dev,prod,staging'
+                    $kubectl get namespace dev,prod,staging
+                    if [$? -eq 0]; then
+                    $kubectl delete -f kubernetes/dev/namespace.yml
+                    else
+                    $kubectl apply -f kubernetes/dev/namespace.yml
+                    fi
+                    '''
+                }
+            }   
+        }
+        stage ("Prepare helm template"){
+            steps{
+                script {
+                    sh '''
+                    $helm version
+                    '''
+                }
             }
         }
         stage("deploy") {

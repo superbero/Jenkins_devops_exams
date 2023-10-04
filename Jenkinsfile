@@ -83,6 +83,7 @@ pipeline {
                 script {
                     sh '''
                     $helm version
+                    $helm create helm-jenkins
                     '''
                 }
             }

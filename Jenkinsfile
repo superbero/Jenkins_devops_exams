@@ -65,7 +65,10 @@ pipeline {
                     do
                         $kubectl get namespace $namespace
                             if [[ $? -eq 0 ]]; then
+                                echo 'Deleting the $namespace namespace if exist'
                                 $kubectl delete -f kubernetes/dev/namespaces/${namespace}.yml
+                                echo 'Recreate from new ... $namespace'
+                                $kubectl apply -f kubernetes/dev/namespaces/${namespace}.yml
                             else
                                 $kubectl apply -f kubernetes/dev/namespaces/${namespace}.yml
                             fi

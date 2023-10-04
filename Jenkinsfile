@@ -55,10 +55,10 @@ pipeline {
             }
         }
         stage("create namespace"){
-            environment {
-                kubeconfig = credentials('kubernetes-config')
-            }
-            steps{
+            kubeconfig(credentialsId: 'kubernetes-config',serverUrl: '')
+            {
+
+                steps{
                 script{
                     sh '''
                     set +e
@@ -79,6 +79,8 @@ pipeline {
                     done
                     '''
                 }
+            }
+            
             }   
         }
         stage ("Prepare helm template"){

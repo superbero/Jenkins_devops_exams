@@ -4,7 +4,7 @@ metadata:
   name:  nginx
   namespace: dev
   labels:
-    app:  nginx
+    app: nginx
 spec:
   selector:
     matchLabels:

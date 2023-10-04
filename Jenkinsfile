@@ -56,7 +56,7 @@ pipeline {
         }
         stage("create namespace"){
             environment {
-                kubeconfig(credentialsId: 'kubernetes-config')
+                kubeconfig = credentials('kubernetes-config')
             }
             steps{
                 script{

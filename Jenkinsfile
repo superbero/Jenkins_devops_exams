@@ -57,12 +57,12 @@ pipeline {
         stage("create namespace"){
             steps{
                 script{
-                    sh -e '''
+                    sh '''
                     namespaces=('dev' 'staging' 'prod')
                     echo 'create namespace dev prod staging'
                     for namespace in "${namespaces[@]}"
                     do
-                        $kubectl get namespace $namespace 2> /dev/null
+                        $kubectl get namespace $namespace 2&1>/dev/null
                             if [[ $? -eq 0  ]]; then
                                 $kubectl delete -f kubernetes/dev/namespaces/${namespace}.yml
                             else

@@ -58,13 +58,17 @@ pipeline {
             steps{
                 script{
                     sh '''
+                    namespaces = ('dev' 'staging' 'prod')
                     echo 'create namespace dev,prod,staging'
-                    $kubectl get namespace dev,prod,staging
-                    if [$? -eq 0]; then
-                    $kubectl delete -f kubernetes/dev/namespace.yml
-                    else
-                    $kubectl apply -f kubernetes/dev/namespace.yml
-                    fi
+                    for namespace in "${namespaces[@]}"
+                    do
+                        $kubectl get $namespace
+                            if [$? -eq 0]; then
+                                $kubectl delete -f kubernetes/dev/namespaces/$namespace.yml
+                            else
+                                $kubectl apply -f kubernetes/dev/namespaces/$namespace.yml
+                            fi
+                    done
                     '''
                 }
             }   

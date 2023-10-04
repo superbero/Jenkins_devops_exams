@@ -38,7 +38,7 @@ pipeline {
             }
         }
         stage("push to docker hub") {
-            step {
+            steps {
                 sh '''
                 $docker push superbero/movie-service:latest
                 $docker push superbero/cast-service:latest

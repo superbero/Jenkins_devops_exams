@@ -50,6 +50,7 @@ pipeline {
             steps{
                 sh '''
                 echo 'config kubernetes'
+                kubectl version --short
                 '''
             }
         }

@@ -45,6 +45,13 @@ pipeline {
                 '''
             }
         }
+        stage("configuration kubernetes"){
+            steps{
+                sh '''
+                echo 'config kubernetes'
+                '''
+            }
+        }
         stage("deploy") {
             steps {
                 echo "deploy"

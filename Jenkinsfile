@@ -6,10 +6,6 @@ pipeline {
         // DOCKER_HUB_USERNAME = credentials('docker-credentials').username
         // DOCKER_HUB_PASSWORD = credentials('docker-credentials').password
     }
-    tools {
-        // Define the Docker tool installation named 'docker' (You may have to configure this in Jenkins)
-        dockerTool 'docker'
-    }
     
     stages {
         stage("pre-build") {
@@ -27,10 +23,15 @@ pipeline {
             }
         stage("build docker images") {
             steps {
+                sh '''
                 echo "building movie-service image"
-                sh '$docker build -f movie-service/. -t superbero/movie-service:latest'
+                cd movie-service
+                sh '$docker build . -t superbero/movie-service:latest'
                 echo "building cast-service image"
-                sh '$docker build -f cast-service/. -t superbero/cast-service:latest'
+                cd ..
+                cd cast-service
+                sh '$docker build . -t superbero/cast-service:latest'
+                '''
             }
         }
         stage("deploy") {

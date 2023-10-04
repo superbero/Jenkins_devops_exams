@@ -1,18 +1,5 @@
 namespace: dev
 
-postgres:
-  image: postgres:12.1-alpine
-  imagePullPolicy: IfNotPresent
-  mountPath: /var/lib/postgresql/data/
-  ports: 5432
-  
-  movie-db:
-    name: postgres-movie-db
-
-  cast-db:
-    name: postgres-movie-db
-
-
 configmap:
   postgres-cast:
     name: postgres-cast-configmap
@@ -47,9 +34,23 @@ Deployment:
     image: nginx
     port: 9090
 
-  movie-service:
-  cast-service:
+  postgres:
+    image: postgres:12.1-alpine
+    mountPath: /var/lib/postgresql/data/
+    ports: 5432
+  
+  movie-db:
+    name: postgres-movie-db
 
+  cast-db:
+    name: postgres-movie-db
+
+  cast-service:
+    image: superbero/cast_service:latest
+    name: cast-svc-deploy
+
+  movie-service:
+    image: superbero/movie_service:latest
 
 volumes:
   storageClassName: standard
@@ -71,13 +72,13 @@ volumes:
       name: postgres-data-movie
 
 services:
-  postgres-cast-service:
+  postgres-cast:
     name: postgres-cast-service
     type: ClusterIP
     port: 5432
     targetPort: 5432
   
-  postgres-movie-service:
+  postgres-movie:
     name: postgres-movie-service
     type: ClusterIP
     ports:  5432
@@ -87,4 +88,9 @@ services:
     type: LoadBalancer
     ports: 9090
     name: nginx-service
-    
+
+  movie-service:
+    name: movie-db-service
+
+  cast-service:
+    name: cast-db-service

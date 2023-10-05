@@ -6,9 +6,9 @@ metadata:
     app: postgres-movie-db
   namespace: dev
 data:
-  POSTGRES_USER: "movie_db_username"
-  POSTGRES_PASSWORD: "movie_db_password"
-  POSTGRES_DB: "movie_db_dev"
+  POSTGRES_USER: "movie"
+  POSTGRES_PASSWORD: "password"
+  POSTGRES_DB: "movie_db"
  
 ---
 apiVersion: v1
@@ -21,4 +21,4 @@ metadata:
 data:
   POSTGRES_USER: "cast"
   POSTGRES_PASSWORD: "password"
-  POSTGRES_DB: "cast_db_dev"
+  POSTGRES_DB: "cast_db"

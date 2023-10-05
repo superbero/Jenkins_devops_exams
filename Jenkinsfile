@@ -9,6 +9,13 @@ pipeline {
     }
     
     stages {
+        stage('Checkout') {
+            steps {
+                // Check out the Git repository
+                script {
+                    git branch: 'master', url: 'https://github.com/superbero/Jenkins_devops_exams.git'
+                }
+            }
         stage("pre-build") {
             steps {
                 script {
@@ -101,7 +108,7 @@ pipeline {
 
                     git add .
                     git commit -m "Helm charts configuration"
-                    git push
+                    git push origin master
                     '''
                 }
             }

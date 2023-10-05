@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.services.postgres-cast.name }} #postgres-cast-service
+  namespace: {{.Values.namespace }} #dev
+spec:
+  selector:
+    app: {{ .Values.Deployment.cast-db.name }} #-cast-db
+  type: {{ .Values.services.postgres-cast.type }} #ClusterIP
+  ports:
+  - name: cast-service-tcp
+    protocol: TCP
+    port: {{ .Values.services.postgres-cast.port }} #8000
+    targetPort: {{ .Values.services.postgres-cast.targetPort }}
+    #nodePort: 
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.services.postgres-movie.name }}#postgres-movie-service
+  namespace: {{.Values.namespace }} #dev
+spec:
+  selector:
+    app: {{ .Values.Deployment.movie-db.name }} #postgres-movie-db
+  type: {{ .Values.services.postgres-movie.type }}
+  ports:
+  - name: movie-service-tcp
+    protocol: TCP
+    port: {{ .Values.services.postgres-movie.port }}
+    targetPort: {{ .Values.services.postgres-movie.targetPort }}
+    #nodePort: 
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.services.cast-service.name }}#cast-db-service
+  namespace: {{.Values.namespace }} #dev
+spec:
+  selector:
+    app: {{ .Values.Deployment.cast-service.name }}#cast-svc-deploy
+  type: {{ .Values.services.cast-service.type }}
+  ports:
+  - name: cast-db-service
+    port: {{ .Values.services.cast-service.port }}
+    targetPort: {{ .Values.services.cast-service.targetPort }} 
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Values.services.movie-service.name }} #movie-service
+  namespace: {{.Values.namespace }} #dev
+spec:
+  selector:
+    app: {{ .Values.Deployment.movie-service.name }}  #movie-svc-deploy
+  type:  {{ .Values.services.movie-service.type }}
+  ports:
+  - name:  movie-service
+    port:  {{ .Values.services.movie-service.port }}
+    targetPort:  {{ .Values.services.movie-service.targetPort }}
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name:  {{ .Values.services.nginx.name }} #nginx-service
+  namespace: {{ .Values.namespace }} #dev
+spec:
+  selector:
+    app: {{.Values.Deployment.nginx.name }}  nginx
+  type:  {{ .Values.services.nginx.type }} LoadBalancer 
+  ports:
+  - name:  nginx-loadbalancer
+    port:  {{ .Values.services.nginx.port }}
+    protocol: TCP
+    targetPort:  {{ .Values.services.nginx.targetPort }}

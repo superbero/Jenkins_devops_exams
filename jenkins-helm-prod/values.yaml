@@ -27,7 +27,7 @@ configmap:
 
 Deployment:
   imagePullPolicy: IfNotPresent
-  replicaCount: 1
+  replicasCount: 1
 
   nginx:
     name: nginx
@@ -43,7 +43,7 @@ Deployment:
     name: postgres-movie-db
 
   cast-db:
-    name: postgres-movie-db
+    name: postgres-cast-db
 
   cast-service:
     image: superbero/cast_service:latest
@@ -51,6 +51,7 @@ Deployment:
 
   movie-service:
     image: superbero/movie_service:latest
+    name: movie-svc-deploy
 
 volumes:
   storageClassName: standard
@@ -88,14 +89,17 @@ services:
   nginx:
     type: LoadBalancer
     ports: 9090
+    targetPort: 9090
     name: nginx-service
 
   movie-service:
     type: ClusterIP
-    name: movie-db-service
+    name: movie-service
     port: 8000
+    targetPort: 8000
 
   cast-service:
     type: ClusterIP
     name: cast-db-service
     port: 8000
+    targetPort: 8000

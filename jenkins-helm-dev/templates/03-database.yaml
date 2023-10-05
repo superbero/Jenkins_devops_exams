@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{.Values.Deployment.movie-db.name}} #postgres-movie-db
+  namespace: {{.Values.namespace}}
+spec:
+  selector:
+    matchLabels:
+      app: {{.Values.Deployment.movie-db.name}} #postgres-movie-db # has to match .spec.template.metadata.labels
+  serviceName: {{.Values.Deployment.movie-db.name}} #postgres-movie-db
+  replicas: {{ .Values.Deployment.replicasCount}} # by default is 1
+  template:
+    metadata:
+      labels:
+        app: {{.Values.Deployment.movie-db.name}} #postgres-movie-db # has to match .spec.selector.matchLabels
+    spec:
+      containers:
+      - name: {{.Values.Deployment.movie-db.name}} #postgres-movie-db
+        image: {{ .Values.Deployment.postgres.image }} #postgres:12.1-alpine
+        imagePullPolicy: {{.Values.Deployment.imagePullPolicy }} #IfNotPresent
+        ports:
+        - containerPort: {{.Values.Deployment.postgres.ports }} #5432
+          name: http
+        envFrom:
+          - configMapRef: 
+              name: postgres-movie-configmap
+        volumeMounts:
+        - name: postgres-data-movie
+          mountPath: {{.Values.Deployment.postgres.mountPath }} #/var/lib/postgresql/data/ 
+      volumes:
+        - name:  postgres-data-movie
+          persistentVolumeClaim: 
+            claimName: postgres-data-movie
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{.Values.Deployment.cast-db.name }} #postgres-cast-db
+  namespace: {{.Values.namespace}}
+spec:
+  selector:
+    matchLabels:
+      app: {{.Values.Deployment.cast-db.name }} #postgres-cast-db # has to match .spec.template.metadata.labels
+  serviceName: {{.Values.Deployment.cast-db.name }} #postgres-cast-db
+  replicas: {{ .Values.Deployment.replicasCount }} # by default is 1
+  template:
+    metadata:
+      labels:
+        app: {{.Values.Deployment.cast-db.name }} #postgres-cast-db # has to match .spec.selector.matchLabels
+    spec:
+      containers:
+      - name: {{.Values.Deployment.cast-db.name }} #postgres-cast-db
+        image: {{ .Values.Deployment.postgres.image }} #postgres:12.1-alpine
+        imagePullPolicy: {{.Values.Deployment.imagePullPolicy }} #IfNotPresent
+        ports:
+        - containerPort: {{.Values.Deployment.postgres.ports }} #5432
+          name: http
+        envFrom:
+          - configMapRef:
+              name: postgres-cast-configmap
+        volumeMounts:
+        - name: {{ .Values.volumes.persistentvolumeclaim.cast-db.name }} #postgres-data-cast
+          mountPath: {{.Values.Deployment.postgres.mountPath }} #/var/lib/postgresql/data/
+      volumes:
+        - name: {{ .Values.volumes.persistentvolumeclaim.cast-db.name }} #postgres-data-cast
+          persistentVolumeClaim:
+            claimName: {{ .Values.volumes.persistentvolumeclaim.cast-db.name }} #postgres-data-cast

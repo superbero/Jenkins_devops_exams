@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  cast-svc-deploy
+  namespace: {{.Values.namespace }} #dev
+  labels:
+    app:  cast-svc-deploy
+spec:
+  selector:
+    matchLabels:
+      app: cast-svc-deploy
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app:  cast-svc-deploy
+    spec:
+      containers:
+      - name:  cast-svc-deploy
+        image:  superbero/cast_service:latest
+        command: ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
+        imagePullPolicy: IfNotPresent
+        envFrom:
+          - configMapRef:
+              name:  cast-service-config
+        ports:
+        - containerPort:  8000
+          name:  cast-svc-deploy
+      restartPolicy: Always
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  movie-svc-deploy
+  namespace: {{.Values.namespace }} #dev
+  labels:
+    app:  movie-svc-deploy
+spec:
+  selector:
+    matchLabels:
+      app: movie-svc-deploy
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app:  movie-svc-deploy
+    spec:
+      containers:
+      - name:  movie-svc-deploy
+        image:  superbero/movie_service:latest
+        command: ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
+        envFrom:
+          - configMapRef:
+              name: movie-service-config
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  nginx
+  namespace: {{.Values.namespace }} #dev
+  labels:
+    app: nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app:  nginx
+    spec:
+      containers:
+      - name:  nginx
+        image:  nginx
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort:  9090
+          name:  nginx
+        volumeMounts:
+        - name: nginx-config
+          mountPath: "/etc/nginx/conf.d/"
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-config
+      restartPolicy: Always

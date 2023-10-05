@@ -1,38 +1,34 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres-cast-service
-  namespace: dev
+  name: {{ .Values.services.postgres-cast.name }} #postgres-cast-service
+  namespace: {{.Values.namespace }} #dev
 spec:
   selector:
-    app: postgres-cast-db
-  type: ClusterIP
+    app: {{ .Values.Deployment.cast-db.name }} #-cast-db
+  type: {{ .Values.services.postgres-cast.type }} #ClusterIP
   ports:
   - name: cast-service-tcp
     protocol: TCP
-    port: 5432
-    targetPort: 5432
-    # If you set the `spec.type` field to `NodePort` and you want a specific port number,
-    # you can specify a value in the `spec.ports[*].nodePort` field.
+    port: {{ .Values.services.postgres-cast.port }} #8000
+    targetPort: {{ .Values.services.postgres-cast.targetPort }}
     #nodePort: 
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres-movie-service
-  namespace: dev
+  name: {{ .Values.services.postgres-movie.name }}#postgres-movie-service
+  namespace: {{.Values.namespace }} #dev
 spec:
   selector:
-    app: postgres-movie-db
-  type: ClusterIP
+    app: {{ .Values.Deployment.movie-db.name }} #postgres-movie-db
+  type: {{ .Values.services.postgres-movie.type }}
   ports:
   - name: movie-service-tcp
     protocol: TCP
-    port: 5432
-    targetPort: 5432
-    # If you set the `spec.type` field to `NodePort` and you want a specific port number,
-    # you can specify a value in the `spec.ports[*].nodePort` field.
+    port: {{ .Values.services.postgres-movie.port }}
+    targetPort: {{ .Values.services.postgres-movie.targetPort }}
     #nodePort: 
 
 ---
@@ -40,46 +36,46 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: cast-db-service
-  namespace: dev
+  name: {{ .Values.services.cast-service.name }}#cast-db-service
+  namespace: {{.Values.namespace }} #dev
 spec:
   selector:
-    app: cast-svc-deploy
-  type: NodePort
+    app: {{ .Values.Deployment.cast-service.name }}#cast-svc-deploy
+  type: {{ .Values.services.cast-service.type }}
   ports:
   - name: cast-db-service
-    port: 8000
-    targetPort: 8000 
+    port: {{ .Values.services.cast-service.port }}
+    targetPort: {{ .Values.services.cast-service.targetPort }} 
 
 ---
 
 kind: Service
 apiVersion: v1
 metadata:
-  name:  movie-service
-  namespace: dev
+  name: {{ .Values.services.movie-service.name }} #movie-service
+  namespace: {{.Values.namespace }} #dev
 spec:
   selector:
-    app:  movie-svc-deploy
-  type:  NodePort
+    app: {{ .Values.Deployment.movie-service.name }}  #movie-svc-deploy
+  type:  {{ .Values.services.movie-service.type }}
   ports:
   - name:  movie-service
-    port:  8000
-    targetPort:  8000
+    port:  {{ .Values.services.movie-service.port }}
+    targetPort:  {{ .Values.services.movie-service.targetPort }}
 
 ---
 
 kind: Service
 apiVersion: v1
 metadata:
-  name:  nginx-service
-  namespace: dev
+  name:  {{ .Values.services.nginx.name }} #nginx-service
+  namespace: {{ .Values.namespace }} #dev
 spec:
   selector:
-    app:  nginx
-  type:  LoadBalancer 
+    app: {{.Values.Deployment.nginx.name }}  nginx
+  type:  {{ .Values.services.nginx.type }} LoadBalancer 
   ports:
   - name:  nginx-loadbalancer
-    port:  9090
+    port:  {{ .Values.services.nginx.port }}
     protocol: TCP
-    targetPort:  9090
+    targetPort:  {{ .Values.services.nginx.targetPort }}

@@ -100,12 +100,13 @@ pipeline {
                     sh '''
                     rm -f jenkins-helm-dev/templates/*
                     cp -f values.yaml jenkins-helm-dev/values.yaml
+                    cp -rf templates jenkins-helm-dev/
 
-                    rm -f jenkins-helm-prod/templates/*
-                    cp -f values.yaml jenkins-helm-prod/values.yaml
+                    // rm -f jenkins-helm-prod/templates/*
+                    // cp -f values.yaml jenkins-helm-prod/values.yaml
 
-                    rm -f jenkins-helm-staging/templates/*
-                    cp -f values.yaml jenkins-helm-staging/values.yaml
+                    // rm -f jenkins-helm-staging/templates/*
+                    // cp -f values.yaml jenkins-helm-staging/values.yaml
 
                     git add .
                     git commit -m "Helm charts configuration"

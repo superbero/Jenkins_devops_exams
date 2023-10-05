@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name:  cast-svc-deploy
-  namespace: dev
+  namespace: {{.Values.namespace }} #dev
   labels:
     app:  cast-svc-deploy
 spec:
@@ -36,7 +36,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name:  movie-svc-deploy
-  namespace: dev
+  namespace: {{.Values.namespace }} #dev
   labels:
     app:  movie-svc-deploy
 spec:
@@ -65,7 +65,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name:  nginx
-  namespace: dev
+  namespace: {{.Values.namespace }} #dev
   labels:
     app: nginx
 spec:

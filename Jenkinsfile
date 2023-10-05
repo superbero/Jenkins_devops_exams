@@ -77,6 +77,11 @@ pipeline {
                                 $kubectl apply -f kubernetes/dev/namespaces/${namespace}.yml >2&1 /dev/null 
                             fi
                     done
+
+                    for namespace in "${namespaces[@]}"
+                    do
+                        $kubectl get all -n ${namespace}
+                    done
                     '''
                 }
             }   

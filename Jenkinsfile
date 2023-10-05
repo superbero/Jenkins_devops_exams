@@ -103,6 +103,7 @@ pipeline {
                     cp -rf templates jenkins-helm-dev/
 
                     rm -f jenkins-helm-prod/templates/*
+                    sed -i "s/namespace: dev/namespace: prod/g" values.yaml
                     cp -f values.yaml jenkins-helm-prod/values.yaml
 
                     rm -f jenkins-helm-staging/templates/*

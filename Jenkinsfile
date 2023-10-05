@@ -98,13 +98,13 @@ pipeline {
             steps{
                 script {
                     sh '''
-                    rm -rf * jenkins-helm-dev/templates/
+                    rm -f jenkins-helm-dev/templates/*
                     cp -f values.yaml jenkins-helm-dev/values.yaml
 
-                    rm -rf * jenkins-helm-prod/templates/
+                    rm -f jenkins-helm-prod/templates/*
                     cp -f values.yaml jenkins-helm-prod/values.yaml
 
-                    rm -rf * jenkins-helm-staging/templates/
+                    rm -f jenkins-helm-staging/templates/*
                     cp -f values.yaml jenkins-helm-staging/values.yaml
 
                     git add .

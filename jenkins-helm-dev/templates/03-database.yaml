@@ -23,7 +23,7 @@ spec:
           name: http
         envFrom:
           - configMapRef: 
-              name: postgres-movie-configmap
+              name: {{ .Values.configmap.postgres_movie.name }}
         volumeMounts:
         - name: postgres-data-movie
           mountPath: {{.Values.Deployment.postgres.mountPath }} #/var/lib/postgresql/data/ 
@@ -40,8 +40,8 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: {{.Values.Deployment.cast_db.name }} #postgres-cast_db # has to match .spec.template.metadata.labels
-  serviceName: {{.Values.Deployment.cast_db.name }} #postgres-cast_db
+      app: {{ .Values.Deployment.cast_db.name }} #postgres-cast_db # has to match .spec.template.metadata.labels
+  serviceName: {{ .Values.Deployment.cast_db.name }} #postgres-cast_db
   replicas: {{ .Values.Deployment.replicasCount }} # by default is 1
   template:
     metadata:
@@ -57,7 +57,7 @@ spec:
           name: http
         envFrom:
           - configMapRef:
-              name: postgres-cast-configmap
+              name: {{ .Values.configmap.cast_service.name }}
         volumeMounts:
         - name: {{ .Values.volumes.persistentvolumeclaim.cast_db.name }} #postgres-data-cast
           mountPath: {{.Values.Deployment.postgres.mountPath }} #/var/lib/postgresql/data/

@@ -3,8 +3,8 @@ namespace: dev
 configmap:
   postgres_cast:
     name: postgres-cast-configmap
-    POSTGRES_USER: "cast"
-    POSTGRES_PASSWORD: "password"
+    POSTGRES_USER: "cast_db_username"
+    POSTGRES_PASSWORD: "cast_db_password"
     POSTGRES_DB: "cast_db_dev"
 
   postgres_movie:
@@ -15,12 +15,12 @@ configmap:
   
   cast_service:
     name: cast-service-config
-    uri: "postgresql://cast_db_username:cast_db_password@postgres-cast-service:5432/cast_db_dev"
+    uri: "postgresql://cast_db_username:cast_db_password@pg-cast:5432/cast_db_dev"
 
   movie_service:
     name: movie-service-config
-    uri: "postgresql://movie_db_username:movie_db_password@postgres-movie-service:5432/movie_db_dev"
-    cast_service_uri: "http://cast-db-service:8000/api/v1/casts/"
+    uri: "postgresql://movie_db_username:movie_db_password@pg-movie:5432/movie_db_dev"
+    cast_service_uri: "http://cast:8000/api/v1/casts/"
 
   nginx:
     name: nginx-config

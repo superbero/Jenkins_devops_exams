@@ -5,7 +5,7 @@ kind: ConfigMap
 metadata:
   name: {{ .Values.configmap.postgres_movie.name }} #postgres_movie-configmap
   labels:
-    app: postgres_movie-db
+    app: {{ .Values.configmap.postgres_movie.name }}
   namespace: {{ .Values.namespace }} #dev
 data:
   POSTGRES_USER: {{ .Values.configmap.postgres_movie.POSTGRES_USER }} #"movie_db_username"
@@ -19,7 +19,7 @@ kind: ConfigMap
 metadata:
   name: {{ .Values.configmap.postgres_cast.name }} #postgres-cast-configmap
   labels:
-    app: postgres-cast-db
+    app: {{ .Values.configmap.postgres_cast.name }}
   namespace: {{ .Values.namespace }} #dev
 data:
   POSTGRES_USER: {{ .Values.configmap.postgres_cast.name }} #"cast"
@@ -34,7 +34,7 @@ metadata:
   name: {{ .Values.configmap.cast_service.name }} #cast-service-config
   namespace: {{ .Values.namespace }} #dev
   labels:
-    app: cast-service-config
+    app: {{ .Values.configmap.cast_service.name }}
 data:
   DATABASE_URI: {{ .Values.configmap.cast_service.uri }} #"postgresql://cast_db_username:cast_db_password@postgres-cast-service:5432/cast_db_dev #dev"
 
@@ -63,10 +63,10 @@ data:
       listen 9090;
 
       location /api/v1/movies {
-        proxy_pass http://movie-service:8000/api/v1/movies;
+        proxy_pass http://movie:8000/api/v1/movies;
       }
 
       location /api/v1/casts {
-        proxy_pass http://cast-db-service:8000/api/v1/casts;
+        proxy_pass http://cast:8000/api/v1/casts;
       }
     }

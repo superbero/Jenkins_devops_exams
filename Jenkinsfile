@@ -16,6 +16,7 @@ pipeline {
                     git branch: 'master', url: 'https://github.com/superbero/Jenkins_devops_exams.git'
                 }
             }
+        }
         stage("pre-build") {
             steps {
                 script {

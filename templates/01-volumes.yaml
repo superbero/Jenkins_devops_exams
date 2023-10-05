@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{.Values.volumes.persistentvolume.name }}
+spec:
+  capacity:
+    storage: {{ .Values.volumes.persistentvolume.size }}
+  volumeMode: Filesystem
+  hostPath:
+    path:  {{ .Values.volumes.persistentvolume.volume_path}}
+  accessModes:
+    - {{ .Values.volumes.accessModes}}
+  persistentVolumeReclaimPolicy: Recycle
+  storageClassName: {{ .Values.volumes.storageClassName }}
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{.Values.volumes.persistentvolumeclaim.movie-db.name }} #{{.Values.volumes.persistentvolume.name }} #postgres-data-movie
+  namespace: {{.Values.namespace }}
+  labels:
+    app: {{.Values.volumes.persistentvolumeclaim.movie-db.name }} #{{.Values.volumes.persistentvolume.name }} #postgres-data-movie
+spec:
+  storageClassName: {{ .Values.volumes.storageClassName }}
+  accessModes:
+    - {{ .Values.volumes.accessModes}}
+  resources:
+    requests:
+      storage: {{.Values.volumes.persistentvolumeclaim.size }}
+  selector:
+    matchLabels:
+      labels: {{.Values.volumes.persistentvolume.name }} #postgres-data
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{.Values.volumes.persistentvolumeclaim.cast-db.name }}
+  namespace: {{.Values.namespace }}
+  labels:
+    app: {{.Values.volumes.persistentvolumeclaim.cast-db.name }}
+spec:
+  storageClassName: {{ .Values.volumes.storageClassName }}
+  accessModes:
+  - {{ .Values.volumes.accessModes}}
+  resources:
+    requests:
+      storage: {{.Values.volumes.persistentvolumeclaim.size }}
+  selector:
+    matchLabels:
+      labels: {{.Values.volumes.persistentvolume.name }} #postgres-data
+

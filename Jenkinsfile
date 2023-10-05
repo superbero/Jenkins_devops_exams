@@ -98,6 +98,10 @@ pipeline {
 
                     rm -rf jenkins-helm-staging/templates/*
                     cp -f values.yml jenkins-helm-staging/
+
+                    git add .
+                    git commit -m "Helm charts configuration"
+                    git push
                     '''
                 }
             }

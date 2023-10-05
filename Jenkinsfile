@@ -85,14 +85,14 @@ pipeline {
             steps{
                 script {
                     sh '''
-                    rm -rf . jenkins-helm-dev/templates
-                    cp values.yml jenkins-helm-dev/
+                    rm -rf jenkins-helm-dev/templates/*
+                    cp -f values.yml jenkins-helm-dev/
 
-                    rm -rf . jenkins-helm-prod/templates
-                    cp values.yml jenkins-helm-prod/
+                    rm -rf jenkins-helm-prod/templates/*
+                    cp -f values.yml jenkins-helm-prod/
 
-                    rm -rf . jenkins-helm-staging/templates
-                    cp values.yml jenkins-helm-staging/
+                    rm -rf jenkins-helm-staging/templates/*
+                    cp -f values.yml jenkins-helm-staging/
                     '''
                 }
             }

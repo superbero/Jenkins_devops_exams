@@ -55,6 +55,7 @@ Deployment:
 volumes:
   storageClassName: standard
   accessModes: ReadWriteMany
+  
   persistentvolume:
     name: postgres-data
     size: 5Gi
@@ -90,7 +91,11 @@ services:
     name: nginx-service
 
   movie-service:
+    type: ClusterIP
     name: movie-db-service
+    port: 8000
 
   cast-service:
+    type: ClusterIP
     name: cast-db-service
+    port: 8000

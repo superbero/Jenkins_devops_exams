@@ -1,82 +1,101 @@
-# Default values for jenkins-helm-staging.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+namespace: dev
 
-replicaCount: 1
+configmap:
+  postgres-cast:
+    name: postgres-cast-configmap
+    POSTGRES_USER: "cast"
+    POSTGRES_PASSWORD: "password"
+    POSTGRES_DB: "cast_db_dev"
 
-image:
-  repository: nginx
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  postgres-movie:
+    name: postgres-movie-configmap
+    POSTGRES_USER: "movie_db_username"
+    POSTGRES_PASSWORD: "movie_db_password"
+    POSTGRES_DB: "movie_db_dev"
+  
+  cast-service:
+    name: cast-service-config
+    uri: "postgresql://cast_db_username:cast_db_password@postgres-cast-service:5432/cast_db_dev"
 
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
+  movie-service:
+    name: movie-service-config
+    uri: "postgresql://movie_db_username:movie_db_password@postgres-movie-service:5432/movie_db_dev"
+    cast_service_uri: "http://cast-db-service:8000/api/v1/casts/"
 
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
+  nginx:
+    name: nginx-config
 
-podAnnotations: {}
+Deployment:
+  imagePullPolicy: IfNotPresent
+  replicaCount: 1
 
-podSecurityContext: {}
-  # fsGroup: 2000
+  nginx:
+    name: nginx
+    image: nginx
+    port: 9090
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+  postgres:
+    image: postgres:12.1-alpine
+    mountPath: /var/lib/postgresql/data/
+    ports: 5432
+  
+  movie-db:
+    name: postgres-movie-db
 
-service:
-  type: ClusterIP
-  port: 80
+  cast-db:
+    name: postgres-movie-db
 
-ingress:
-  enabled: false
-  className: ""
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  cast-service:
+    image: superbero/cast_service:latest
+    name: cast-svc-deploy
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+  movie-service:
+    image: superbero/movie_service:latest
 
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+volumes:
+  storageClassName: standard
+  accessModes: ReadWriteMany
+  
+  persistentvolume:
+    name: postgres-data
+    size: 5Gi
+    volume_path: /Users/admin/data
+   
+  persistentvolumeclaim:
+    size: 2Gi
+    storageClassName: standard
+    accessModes: ReadWriteMany
 
-nodeSelector: {}
+    cast-db:
+      name: postgres-data-cast
+    
+    movie-db:
+      name: postgres-data-movie
 
-tolerations: []
+services:
+  postgres-cast:
+    name: postgres-cast-service
+    type: ClusterIP
+    port: 5432
+    targetPort: 5432
+  
+  postgres-movie:
+    name: postgres-movie-service
+    type: ClusterIP
+    ports:  5432
+    targetPort: 5432
 
-affinity: {}
+  nginx:
+    type: LoadBalancer
+    ports: 9090
+    name: nginx-service
+
+  movie-service:
+    type: ClusterIP
+    name: movie-db-service
+    port: 8000
+
+  cast-service:
+    type: ClusterIP
+    name: cast-db-service
+    port: 8000

@@ -8,7 +8,7 @@ spec:
     app: {{ .Values.Deployment.cast_db.name }} #-cast-db
   type: {{ .Values.services.postgres_cast.type }} #ClusterIP
   ports:
-  - name: cast_service-tcp
+  - name: postgres-cast
     protocol: TCP
     port: {{ .Values.services.postgres_cast.port }} #8000
     targetPort: {{ .Values.services.postgres_cast.targetPort }}
@@ -25,7 +25,7 @@ spec:
     app: {{ .Values.Deployment.movie_db.name }} #postgres_movie-db
   type: {{ .Values.services.postgres_movie.type }}
   ports:
-  - name: movie_service-tcp
+  - name: postgres-movie
     protocol: TCP
     port: {{ .Values.services.postgres_movie.ports }}
     targetPort: {{ .Values.services.postgres_movie.targetPort }}
@@ -43,7 +43,7 @@ spec:
     app: {{ .Values.Deployment.cast_service.name }} #cast-svc-deploy
   type: {{ .Values.services.cast_service.type }}
   ports:
-  - name: cast-db-service
+  - name: cast-db
     port: {{ .Values.services.cast_service.port }}
     targetPort: {{ .Values.services.cast_service.targetPort }} 
 
@@ -59,7 +59,7 @@ spec:
     app: {{ .Values.Deployment.movie_service.name }}  #movie-svc-deploy
   type:  {{ .Values.services.movie_service.type }}
   ports:
-  - name:  movie_service
+  - name:  movie-db
     port:  {{ .Values.services.movie_service.port }}
     targetPort:  {{ .Values.services.movie_service.targetPort }}
 
@@ -72,8 +72,8 @@ metadata:
   namespace: {{ .Values.namespace }} #dev
 spec:
   selector:
-    app: {{.Values.Deployment.nginx.name }}  nginx
-  type:  {{ .Values.services.nginx.type }} LoadBalancer 
+    app: {{.Values.Deployment.nginx.name }}  #nginx
+  type:  {{ .Values.services.nginx.type }} #LoadBalancer 
   ports:
   - name:  nginx-loadbalancer
     port:  {{ .Values.services.nginx.ports }}

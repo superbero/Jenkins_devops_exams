@@ -75,13 +75,13 @@ volumes:
 
 services:
   postgres_cast:
-    name: postgres-cast-service
+    name: pg-cast
     type: ClusterIP
     port: 5432
     targetPort: 5432
   
   postgres_movie:
-    name: postgres-movie-service
+    name: pg-movie
     type: ClusterIP
     ports:  5432
     targetPort: 5432
@@ -90,16 +90,16 @@ services:
     type: LoadBalancer
     ports: 9090
     targetPort: 9090
-    name: nginx-service
+    name: nginx
 
   movie_service:
     type: ClusterIP
-    name: movie-service
+    name: movie
     port: 8000
     targetPort: 8000
 
   cast_service:
     type: ClusterIP
-    name: cast-db-service
+    name: cast
     port: 8000
     targetPort: 8000

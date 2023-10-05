@@ -4,7 +4,7 @@ metadata:
   name: {{.Values.volumes.persistentvolume.name }}
 spec:
   capacity:
-    storage: {{ .Values.volumes.persistentvolume.size }}
+    storage: {{.Values.volumes.persistentvolume.size }}
   volumeMode: Filesystem
   hostPath:
     path:  {{ .Values.volumes.persistentvolume.volume_path}}
@@ -17,10 +17,10 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{.Values.volumes.persistentvolumeclaim.movie-db.name }} #{{.Values.volumes.persistentvolume.name }} #postgres-data-movie
+  name: {{.Values.volumes.persistentvolumeclaim.movie_db.name }} #{{.Values.volumes.persistentvolume.name }} #postgres-data-movie
   namespace: {{.Values.namespace }}
   labels:
-    app: {{.Values.volumes.persistentvolumeclaim.movie-db.name }} #{{.Values.volumes.persistentvolume.name }} #postgres-data-movie
+    app: {{.Values.volumes.persistentvolumeclaim.movie_db.name }} #{{.Values.volumes.persistentvolume.name }} #postgres-data-movie
 spec:
   storageClassName: {{ .Values.volumes.storageClassName }}
   accessModes:
@@ -37,10 +37,10 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{.Values.volumes.persistentvolumeclaim.cast-db.name }}
+  name: {{.Values.volumes.persistentvolumeclaim.cast_db.name }}
   namespace: {{.Values.namespace }}
   labels:
-    app: {{.Values.volumes.persistentvolumeclaim.cast-db.name }}
+    app: {{.Values.volumes.persistentvolumeclaim.cast_db.name }}
 spec:
   storageClassName: {{ .Values.volumes.storageClassName }}
   accessModes:

@@ -1,23 +1,23 @@
 namespace: dev
 
 configmap:
-  postgres-cast:
+  postgres_cast:
     name: postgres-cast-configmap
     POSTGRES_USER: "cast"
     POSTGRES_PASSWORD: "password"
     POSTGRES_DB: "cast_db_dev"
 
-  postgres-movie:
+  postgres_movie:
     name: postgres-movie-configmap
     POSTGRES_USER: "movie_db_username"
     POSTGRES_PASSWORD: "movie_db_password"
     POSTGRES_DB: "movie_db_dev"
   
-  cast-service:
+  cast_service:
     name: cast-service-config
     uri: "postgresql://cast_db_username:cast_db_password@postgres-cast-service:5432/cast_db_dev"
 
-  movie-service:
+  movie_service:
     name: movie-service-config
     uri: "postgresql://movie_db_username:movie_db_password@postgres-movie-service:5432/movie_db_dev"
     cast_service_uri: "http://cast-db-service:8000/api/v1/casts/"
@@ -39,17 +39,17 @@ Deployment:
     mountPath: /var/lib/postgresql/data/
     ports: 5432
   
-  movie-db:
+  movie_db:
     name: postgres-movie-db
 
-  cast-db:
+  cast_db:
     name: postgres-cast-db
 
-  cast-service:
+  cast_service:
     image: superbero/cast_service:latest
     name: cast-svc-deploy
 
-  movie-service:
+  movie_service:
     image: superbero/movie_service:latest
     name: movie-svc-deploy
 
@@ -67,20 +67,20 @@ volumes:
     storageClassName: standard
     accessModes: ReadWriteMany
 
-    cast-db:
+    cast_db:
       name: postgres-data-cast
     
-    movie-db:
+    movie_db:
       name: postgres-data-movie
 
 services:
-  postgres-cast:
+  postgres_cast:
     name: postgres-cast-service
     type: ClusterIP
     port: 5432
     targetPort: 5432
   
-  postgres-movie:
+  postgres_movie:
     name: postgres-movie-service
     type: ClusterIP
     ports:  5432
@@ -92,13 +92,13 @@ services:
     targetPort: 9090
     name: nginx-service
 
-  movie-service:
+  movie_service:
     type: ClusterIP
     name: movie-service
     port: 8000
     targetPort: 8000
 
-  cast-service:
+  cast_service:
     type: ClusterIP
     name: cast-db-service
     port: 8000

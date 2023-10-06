@@ -1,72 +1,66 @@
-
-### configmap for postgres_movie-db ###
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.configmap.postgres_movie.name }} #postgres_movie-configmap
+  name: postgres-movie-configmap
   labels:
-    app: {{ .Values.configmap.postgres_movie.name }}
-  namespace: {{ .Values.namespace }} #dev
+    app: postgres-movie-db
+  namespace: dev
 data:
-  POSTGRES_USER: {{ .Values.configmap.postgres_movie.POSTGRES_USER }} #"movie_db_username"
-  POSTGRES_PASSWORD: {{ .Values.configmap.postgres_movie.POSTGRES_PASSWORD }} #"movie_db_password"
-  POSTGRES_DB: {{ .Values.configmap.postgres_movie.POSTGRES_DB }} #"movie_db_dev #dev"
+  POSTGRES_USER: "movie"
+  POSTGRES_PASSWORD: "password"
+  POSTGRES_DB: "movie_db"
  
 ---
-### configmap for postgres-cast-db ###
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.configmap.postgres_cast.name }} #postgres-cast-configmap
+  name: postgres-cast-configmap
   labels:
-    app: {{ .Values.configmap.postgres_cast.name }}
-  namespace: {{ .Values.namespace }} #dev
+    app: postgres-cast-db
+  namespace: dev
 data:
-  POSTGRES_USER: {{ .Values.configmap.postgres_cast.name }} #"cast"
-  POSTGRES_PASSWORD: {{ .Values.configmap.postgres_cast.name }} #"password"
-  POSTGRES_DB: {{ .Values.configmap.postgres_cast.name }} #"cast_db_dev #dev"
+  POSTGRES_USER: "cast"
+  POSTGRES_PASSWORD: "password"
+  POSTGRES_DB: "cast_db"
 
 ---
-### configmap for cast-service ###
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: movie-service-config
+  namespace: dev
+data:
+  DATABASE_URI: "postgresql://movie:password@postgres-movie-service:5432/movie_db"
+  CAST_SERVICE_HOST_URL: "http://cast-db-service:8000/api/v1/casts/"
+
+---
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.configmap.cast_service.name }} #cast-service-config
-  namespace: {{ .Values.namespace }} #dev
+  name: cast-service-config
+  namespace: dev
   labels:
-    app: {{ .Values.configmap.cast_service.name }}
+    app: cast-service-config
 data:
-  DATABASE_URI: {{ .Values.configmap.cast_service.uri }} #"postgresql://cast_db_username:cast_db_password@postgres-cast-service:5432/cast_db_dev #dev"
+  DATABASE_URI: "postgresql://cast:password@postgres-cast-service:5432/cast_db"
 
 ---
-### configmap for movie-service ###
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: {{ .Values.configmap.movie_service.name }} #movie-service-config
-  namespace: {{ .Values.namespace }} #dev
-data:
-  DATABASE_URI: {{ .Values.configmap.movie_service.uri }} #"postgresql://movie_db_username:movie_db_password@postgres_movie-service:5432/movie_db_dev #dev"
-  #DATABASE_URI: "postgresql://movie:password@postgres_movie-service:5432/movie_db_dev #dev"
-  CAST_SERVICE_HOST_URL: {{ .Values.configmap.movie_service.cast_service_uri }} #"http://cast-db-service:8000/api/v1/casts/"
-
----
-### configmap for nginx ###
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.configmap.nginx.name }} #nginx-config
-  namespace: {{ .Values.namespace }} #dev
+  name: nginx-config
+  namespace: dev
 data:
   default.conf: |
     server {
       listen 9090;
 
       location /api/v1/movies {
-        proxy_pass http://movie:8000/api/v1/movies;
+        proxy_pass http://movie-service:8000/api/v1/movies;
       }
 
       location /api/v1/casts {
-        proxy_pass http://cast:8000/api/v1/casts;
+        proxy_pass http://cast-db-service:8000/api/v1/casts;
       }
     }

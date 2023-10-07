@@ -60,7 +60,7 @@ volumes:
   persistentvolume:
     name: postgres-data
     size: 5Gi
-    volume_path: "/Users/admin/data"
+    volume_path: /Users/admin/data
    
   persistentvolumeclaim:
     size: 2Gi

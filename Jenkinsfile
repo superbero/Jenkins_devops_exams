@@ -108,7 +108,7 @@ pipeline {
 
                     rm -f jenkins-helm-staging/templates/*
                     cp -f values.yaml jenkins-helm-staging/values.yaml
-                    sed -i 's/namespace: dev/namespace: staging/g' jenkins-helm-prod/values.yaml
+                    sh "sed -i 's/namespace: dev/namespace: staging/g' jenkins-helm-prod/values.yaml"
 
                     git add .
                     git commit -m "Helm charts configuration"

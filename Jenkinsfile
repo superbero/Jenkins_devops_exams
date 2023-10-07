@@ -105,12 +105,14 @@ pipeline {
 
                     rm -f jenkins-helm-prod/templates/*
                     cp -f values.yaml jenkins-helm-prod/values.yaml
-                    sed -i 's/namespace: dev/namespace: prod/g' jenkins-helm-prod/values.yaml
+                    sed -i '' 's/namespace: dev/namespace: prod/g' jenkins-helm-prod/values.yaml
+                    cp -rf templates jenkins-helm-prod/
 
 
                     rm -f jenkins-helm-staging/templates/*
                     cp -f values.yaml jenkins-helm-staging/values.yaml
-                    sed -i 's/namespace: dev/namespace: staging/g' jenkins-helm-staging/values.yaml
+                    sed -i '' 's/namespace: dev/namespace: staging/g' jenkins-helm-staging/values.yaml
+                    cp -rf templates jenkins-helm-staging/
 
 
                     git add .

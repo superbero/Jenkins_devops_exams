@@ -1,0 +1,111 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.Deployment.cast_service.name}} #cast-svc-deploy
+  namespace: {{ .Values.namespace}} #dev
+  labels:
+    app: {{ .Values.Deployment.cast_service.name}} #cast-svc-deploy
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.Deployment.cast_service.name}} #cast-svc-deploy
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.Deployment.cast_service.name}} #cast-svc-deploy
+    spec:
+      containers:
+      - name: {{ .Values.Deployment.cast_service.name}} #cast-svc-deploy
+        image: {{ .Values.Deployment.cast_service.image }}  #superbero/cast_service:latest
+        command: ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
+        imagePullPolicy: {{ .Values.Deployment.imagePullPolicy}} #IfNotPresent
+        envFrom:
+          - configMapRef:
+              name: {{ .Values.configmap.cast_service.name }} #cast-service-config
+        ports:
+        - containerPort:  8000
+          name: {{ .Values.Deployment.cast_service.name }} #cast-svc-deploy
+      restartPolicy: Always
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.Deployment.movie_service.name}} #movie-svc-deploy
+  namespace: {{ .Values.namespace }} #dev
+  labels:
+    app: {{ .Values.Deployment.movie_service.name}} #movie-svc-deploy
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.Deployment.movie_service.name}} #movie-svc-deploy
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.Deployment.movie_service.name}} #movie-svc-deploy
+    spec:
+      containers:
+      - name: {{ .Values.Deployment.movie_service.name}} #movie-svc-deploy
+        image:  {{ .Values.Deployment.movie_service.image }} #superbero/movie_service:latest
+        imagePullPolicy: {{ .Values.Deployment.imagePullPolicy }} #IfNotPresent
+        command: ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
+        envFrom:
+          - configMapRef:
+              name: {{ .Values.configmap.movie_service.name }} #movie-service-config
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  {{ .Values.Deployment.nginx.name }} #nginx
+  namespace: {{ .Values.namespace }} #dev
+  labels:
+    app: {{ .Values.Deployment.nginx.name }} #nginx
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.Deployment.nginx.name }} #nginx
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app:  {{ .Values.Deployment.nginx.name }} #nginx
+    spec:
+      # initContainers:
+        # Init containers are exactly like regular containers, except:
+          # - Init containers always run to completion.
+          # - Each init container must complete successfully before the next one starts.
+      containers:
+      - name:  {{ .Values.Deployment.nginx.name }} #nginx
+        image:  {{ .Values.Deployment.nginx.image }} #nginx
+        imagePullPolicy: {{ .Values.Deployment.imagePullPolicy }} #IfNotPresent
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: {{ .Values.Deployment.nginx.port}} #9090
+          name:  {{ .Values.Deployment.nginx.name }} #nginx
+        volumeMounts:
+        - name: {{ .Values.configmap.nginx.name }} #nginx-config
+          mountPath: /etc/nginx/conf.d/
+      volumes:
+        - name: {{ .Values.configmap.nginx.name }} #nginx-config
+          configMap:
+            name:  {{ .Values.configmap.nginx.name }} #nginx-config
+      restartPolicy: Always

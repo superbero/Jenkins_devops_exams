@@ -1,4 +1,4 @@
-namespace: dev
+namespace: staging
 
 configmap:
   postgres_cast:

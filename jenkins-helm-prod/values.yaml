@@ -5,22 +5,22 @@ configmap:
     name: postgres-cast-configmap
     POSTGRES_USER: "cast"
     POSTGRES_PASSWORD: "password"
-    POSTGRES_DB: "cast_db_dev"
+    POSTGRES_DB: "cast_db"
 
   postgres_movie:
     name: postgres-movie-configmap
-    POSTGRES_USER: "movie_db_username"
-    POSTGRES_PASSWORD: "movie_db_password"
-    POSTGRES_DB: "movie_db_dev"
+    POSTGRES_USER: "movie"
+    POSTGRES_PASSWORD: "password"
+    POSTGRES_DB: "movie_db"
   
   cast_service:
     name: cast-service-config
-    uri: "postgresql://cast_db_username:cast_db_password@postgres-cast-service:5432/cast_db_dev"
+    uri: "postgresql://cast:password@pg-cast:5432/cast_db"
 
   movie_service:
     name: movie-service-config
-    uri: "postgresql://movie_db_username:movie_db_password@postgres-movie-service:5432/movie_db_dev"
-    cast_service_uri: "http://cast-db-service:8000/api/v1/casts/"
+    uri: "postgresql://movie:password@pg-movie:5432/movie_db"
+    cast_service_uri: "http://cast:8000/api/v1/casts/"
 
   nginx:
     name: nginx-config
@@ -75,13 +75,13 @@ volumes:
 
 services:
   postgres_cast:
-    name: postgres-cast-service
+    name: pg-cast
     type: ClusterIP
     port: 5432
     targetPort: 5432
   
   postgres_movie:
-    name: postgres-movie-service
+    name: pg-movie
     type: ClusterIP
     ports:  5432
     targetPort: 5432
@@ -90,16 +90,16 @@ services:
     type: LoadBalancer
     ports: 9090
     targetPort: 9090
-    name: nginx-service
+    name: nginx
 
   movie_service:
     type: ClusterIP
-    name: movie-service
+    name: movie
     port: 8000
     targetPort: 8000
 
   cast_service:
     type: ClusterIP
-    name: cast-db-service
+    name: cast
     port: 8000
     targetPort: 8000

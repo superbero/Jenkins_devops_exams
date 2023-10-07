@@ -62,9 +62,56 @@ pipeline {
                 '''
             }
         }
+        stage('User Input') {
+            steps {
+                script {
+                    def userInput = input(
+                        id: 'userInput', message: 'Select an action:',
+                        parameters: [
+                            choice(name: 'Action', choices: 'Install\nUpgrade\nSkip', description: 'Select an action')
+                        ]
+                    )
+                    
+                    if (userInput == 'Install') {
+                        echo 'User selected Install'
+                        // Add your Helm install command here
+                        // sh 'helm install my-release ./path/to/chart'
+                    } else if (userInput == 'Upgrade') {
+                        echo 'User selected Upgrade'
+                        // Add your Helm upgrade command here
+                        // sh 'helm upgrade my-release ./path/to/chart'
+                    } else if (userInput == 'Skip') {
+                        echo 'User selected to skip this stage'
+                    } else {
+                        error 'Invalid selection'
+                    }
+                }
+            }
+        }
+
+        stage('Conditional Stage') {
+            when {
+                expression { userInput != 'Skip' }
+            }
+            steps {
+                echo 'This stage will only run if user did not choose to skip'
+                // Add your stage steps here
+            }
+        }
+    }
+
+    post {
+        always {
+            // Clean up resources or perform additional tasks after the deployment
+        }
+    }
+
         stage("create namespace"){
             environment {
                 kubeconfig = credentials('kubernetes-config')
+            }
+            when{
+                expression = userInput('Install')
             }
             steps{
                 script{
@@ -95,6 +142,9 @@ pipeline {
             }   
         }
         stage ("Helm Charts Configuration"){
+            when{
+                expression = userInput ('Install')
+            }
             steps{
                 script {
                     sh '''

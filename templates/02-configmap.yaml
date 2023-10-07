@@ -4,7 +4,7 @@ metadata:
   name: postgres-movie-configmap
   labels:
     app: postgres-movie-db
-  namespace: dev
+  namespace: {{ .Values.namespace }} #dev
 data:
   POSTGRES_USER: "movie"
   POSTGRES_PASSWORD: "password"
@@ -17,7 +17,7 @@ metadata:
   name: postgres-cast-configmap
   labels:
     app: postgres-cast-db
-  namespace: dev
+  namespace: {{ .Values.namespace }} #dev
 data:
   POSTGRES_USER: "cast"
   POSTGRES_PASSWORD: "password"
@@ -28,17 +28,29 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: movie-service-config
-  namespace: dev
+  namespace: {{ .Values.namespace }} #dev
 data:
   DATABASE_URI: "postgresql://movie:password@postgres-movie-service:5432/movie_db"
   CAST_SERVICE_HOST_URL: "http://cast-db-service:8000/api/v1/casts/"
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cast-service-config
+  namespace: {{ .Values.namespace }} #dev
+  labels:
+    app: cast-service-config
+data:
+  DATABASE_URI: "postgresql://cast:password@postgres-cast-service:5432/cast_db"
 
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: nginx-config
-  namespace: dev
+  namespace: {{ .Values.namespace }} #dev
 data:
   default.conf: |
     server {

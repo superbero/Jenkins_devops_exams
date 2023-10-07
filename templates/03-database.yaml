@@ -1,34 +1,34 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: postgres-movie-db
+  name: {{ .Values.Deployment.movie_db.name}} #postgres-movie-db
   namespace: dev
 spec:
   selector:
     matchLabels:
-      app: postgres-movie-db # has to match .spec.template.metadata.labels
-  serviceName: postgres-movie-db
-  replicas: 1 # by default is 1
+      app: {{ .Values.Deployment.movie_db.name}} #postgres-movie-db # has to match .spec.template.metadata.labels
+  serviceName: {{ .Values.Deployment.movie_db.name }} #postgres-movie-db
+  replicas: {{ .Values.Deployment.replicasCount }}  # by default is 1
   template:
     metadata:
       labels:
-        app: postgres-movie-db # has to match .spec.selector.matchLabels
+        app: {{ .Values.Deployment.movie_db.name}} #postgres-movie-db # has to match .spec.selector.matchLabels
     spec:
       containers:
-      - name: postgres-movie-db
-        image: postgres:12.1-alpine
+      - name: {{ .Values.Deployment.movie_db.name}} #postgres-movie-db
+        image: {{ .Values.Deployment.postgres.image }} #postgres:12.1-alpine
         ports:
         - containerPort: 5432
         envFrom:
           - configMapRef: 
-              name: postgres-movie-configmap
+              name: {{ .Values.configmap.postgres_movie.name }} #postgres-movie-configmap
         volumeMounts:
-        - name: postgres-data-movie
-          mountPath: /var/lib/postgresql/data/ 
+        - name: {{ .Values.volumes.persistentvolumeclaim.movie_db.name}} #postgres-data-movie
+          mountPath: {{ .Values.Deployment.postgres.mountPath }} #/var/lib/postgresql/data/ 
       volumes:
-        - name:  postgres-data-movie
+        - name: {{ .Values.volumes.persistentvolumeclaim.movie_db.name}} #postgres-data-movie
           persistentVolumeClaim: 
-            claimName: postgres-data-movie
+            claimName: {{ .Values.volumes.persistentvolumeclaim.movie_db.name}} #postgres-data-movie
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -56,7 +56,7 @@ spec:
           - configMapRef:
               name: {{.Values.configmap.postgres_cast.name }} #postgres-cast-configmap
         volumeMounts:
-        - name: postgres-data-cast
+        - name: {{ .Values.volumes.persistentvolumeclaim.cast_db.name}} #postgres-data-cast
           mountPath: {{ .Values.Deployment.postgres.mountPath }} #/var/lib/postgresql/data/
       volumes:
         - name: {{ .Values.volumes.persistentvolumeclaim.cast_db.name}}  #postgres-data-cast

@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postgres-cast-service
-  namespace: dev
-spec:
+  namespace: {{ .Values.namespace }} #dev
+spec: 
   selector:
     app: postgres-cast-db
   type: ClusterIP
@@ -21,8 +21,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postgres-movie-service
-  namespace: dev
-spec:
+  namespace: {{ .Values.namespace }} #dev
+spec: 
   selector:
     app: postgres-movie-db
   type: ClusterIP
@@ -39,11 +39,11 @@ kind: Service
 apiVersion: v1
 metadata:
   name:  movie-service
-  namespace: dev
-spec:
+  namespace: {{ .Values.namespace }} #dev
+spec: 
   selector:
     app:  movie-svc-deploy
-  type:  NodePort
+  type:  ClusterIP
   ports:
   - name:  movie-service
     port:  8000
@@ -55,11 +55,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: cast-db-service
-  namespace: dev
-spec:
+  namespace: {{ .Values.namespace}} #dev
+spec: 
   selector:
     app: cast-svc-deploy
-  type: NodePort
+  type: ClusterIP
   ports:
   - name: cast-db-service
     port: 8000
@@ -73,8 +73,8 @@ kind: Service
 apiVersion: v1
 metadata:
   name:  nginx-service
-  namespace: dev
-spec:
+  namespace: {{ .Values.namespace}} #dev
+spec: 
   selector:
     app:  nginx
   type:  LoadBalancer 

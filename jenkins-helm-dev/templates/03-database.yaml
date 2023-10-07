@@ -7,8 +7,8 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.Deployment.movie_db.name}} #postgres-movie-db # has to match .spec.template.metadata.labels
-  serviceName: {{ .Values.Deployment.movie_db.name}} #postgres-movie-db
-  replicas: {{ .Values.Deployment.replicasCount}}  # by default is 1
+  serviceName: {{ .Values.Deployment.movie_db.name }} #postgres-movie-db
+  replicas: {{ .Values.Deployment.replicasCount }}  # by default is 1
   template:
     metadata:
       labels:

@@ -1,80 +1,77 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name:  cast-svc-deploy
-  namespace: dev
+  name: {{ .Values.Deployment.cast_service.name}} #cast-svc-deploy
+  namespace: {{ .Values.namespace}} #dev
   labels:
-    app:  cast-svc-deploy
+    app: {{ .Values.Deployment.cast_service.name}} #cast-svc-deploy
 spec:
   selector:
     matchLabels:
-      app: cast-svc-deploy
+      app: {{ .Values.Deployment.cast_service.name}} #cast-svc-deploy
   replicas: 1
   strategy:
     type: RollingUpdate
   template:
     metadata:
       labels:
-        app:  cast-svc-deploy
+        app: {{ .Values.Deployment.cast_service.name}} #cast-svc-deploy
     spec:
       containers:
-      - name:  cast-svc-deploy
-        image:  superbero/cast_service:latest
+      - name: {{ .Values.Deployment.cast_service.name}} #cast-svc-deploy
+        image: {{ .Values.Deployment.cast_service.image }}  #superbero/cast_service:latest
         command: ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: {{ .Values.Deployment.imagePullPolicy}} #IfNotPresent
         envFrom:
           - configMapRef:
-              name:  cast-service-config
+              name: {{ .Values.configmap.cast_service.name }} #cast-service-config
         ports:
         - containerPort:  8000
-          name:  cast-svc-deploy
+          name: {{ .Values.Deployment.cast_service.name }} #cast-svc-deploy
       restartPolicy: Always
 ---
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name:  movie-svc-deploy
-  namespace: dev
+  name: {{ .Values.Deployment.movie_service.name}} #movie-svc-deploy
+  namespace: {{ .Values.namespace }} #dev
   labels:
-    app:  movie-svc-deploy
+    app: {{ .Values.Deployment.movie_service.name}} #movie-svc-deploy
 spec:
   selector:
     matchLabels:
-      app: movie-svc-deploy
+      app: {{ .Values.Deployment.movie_service.name}} #movie-svc-deploy
   replicas: 1
   strategy:
     type: RollingUpdate
   template:
     metadata:
       labels:
-        app:  movie-svc-deploy
+        app: {{ .Values.Deployment.movie_service.name}} #movie-svc-deploy
     spec:
-      # initContainers:
-        # Init containers are exactly like regular containers, except:
-          # - Init containers always run to completion.
-          # - Each init container must complete successfully before the next one starts.
       containers:
-      - name:  movie-svc-deploy
-        image:  superbero/movie_service:latest
+      - name: {{ .Values.Deployment.movie_service.name}} #movie-svc-deploy
+        image:  {{ .Values.Deployment.movie_service.image }} #superbero/movie_service:latest
+        imagePullPolicy: {{ .Values.Deployment.imagePullPolicy }} #IfNotPresent
         command: ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
         envFrom:
           - configMapRef:
-              name: movie-service-config
+              name: {{ .Values.configmap.movie_service.name }} #movie-service-config
 
 ---
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name:  nginx
-  namespace: dev
+  name:  {{ .Values.Deployment.nginx.name }} #nginx
+  namespace: {{ .Values.namespace }} #dev
   labels:
-    app: nginx
+    app: {{ .Values.Deployment.nginx.name }} #nginx
 spec:
   selector:
     matchLabels:
-      app: nginx
+      app: {{ .Values.Deployment.nginx.name }} #nginx
   replicas: 1
   strategy:
     rollingUpdate:
@@ -84,16 +81,16 @@ spec:
   template:
     metadata:
       labels:
-        app:  nginx
+        app:  {{ .Values.Deployment.nginx.name }} #nginx
     spec:
       # initContainers:
         # Init containers are exactly like regular containers, except:
           # - Init containers always run to completion.
           # - Each init container must complete successfully before the next one starts.
       containers:
-      - name:  nginx
-        image:  nginx
-        imagePullPolicy: IfNotPresent
+      - name:  {{ .Values.Deployment.nginx.name }} #nginx
+        image:  {{ .Values.Deployment.nginx.image }} #nginx
+        imagePullPolicy: {{ .Values.Deployment.imagePullPolicy }} #IfNotPresent
         resources:
           requests:
             cpu: 100m
@@ -102,13 +99,13 @@ spec:
             cpu: 100m
             memory: 100Mi
         ports:
-        - containerPort:  9090
-          name:  nginx
+        - containerPort: {{ .Values.Deployment.nginx.port}} #9090
+          name:  {{ .Values.Deployment.nginx.name }} #nginx
         volumeMounts:
-        - name: nginx-config
-          mountPath: "/etc/nginx/conf.d/"
+        - name: {{ .Values.configmap.nginx.name }} #nginx-config
+          mountPath: /etc/nginx/conf.d/
       volumes:
-        - name: nginx-config
+        - name: {{ .Values.configmap.nginx.name }} #nginx-config
           configMap:
-            name: nginx-config
+            name:  {{ .Values.configmap.nginx.name }} #nginx-config
       restartPolicy: Always

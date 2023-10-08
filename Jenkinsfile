@@ -110,6 +110,7 @@ pipeline {
             }
             when{
                 expression { env.USER_INPUT == 'Install' }
+                echo(env.USER_INPUT)
             }
             steps{
                 script{

@@ -99,6 +99,7 @@ pipeline {
                 expression { env.USER_INPUT == 'Skip' }
             }
             steps {
+                echo("user input {$env.USER_INPUT}")
                 echo 'This stage will only run if user did not choose to skip'
                 // Add your stage steps here
             }
@@ -110,12 +111,13 @@ pipeline {
             }
             when{
                 expression { env.USER_INPUT == 'Install' }
-                echo(env.USER_INPUT)
+                
             }
             steps{
                 script{
                     sh '''
                     set +e
+                    
                     namespaces=('dev' 'staging' 'prod')
                     echo 'create namespace dev prod staging'
                     for namespace in "${namespaces[@]}"

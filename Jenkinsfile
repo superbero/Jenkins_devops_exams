@@ -96,7 +96,7 @@ pipeline {
 
         stage('Conditional Stage') {
             when {
-                expression { env.USER_INPUT == 'Skip' }
+                expression { ${USER_INPUT} == 'Skip' }
             }
             steps {
                 echo("user input: ${env.USER_INPUT}")

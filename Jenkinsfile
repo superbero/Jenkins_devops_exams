@@ -99,7 +99,7 @@ pipeline {
                 expression { env.USER_INPUT == 'Skip' }
             }
             steps {
-                echo("user input {$env.USER_INPUT}")
+                echo("user input: ${env.USER_INPUT}")
                 echo 'This stage will only run if user did not choose to skip'
                 // Add your stage steps here
             }

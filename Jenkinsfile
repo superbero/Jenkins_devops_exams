@@ -88,7 +88,7 @@ pipeline {
                     // }
                     
                     echo "User selected: ${userInput}"
-                    env.USER_INPUT = userInput
+                    $USER_INPUT = ${userInput}
 
                 }
             }
@@ -96,7 +96,7 @@ pipeline {
 
         stage('Conditional Stage') {
             when {
-                expression { ${USER_INPUT} == 'Skip' }
+                expression { USER_INPUT == 'Skip' }
             }
             steps {
                 echo("user input: ${env.USER_INPUT}")

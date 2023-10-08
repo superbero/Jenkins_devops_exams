@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKER_HUB_REGISTRY = "docker.io"
+        USER_INPUT=''
         // docker = "/usr/local/bin/docker"
         // docker = "/Users/admin/.jenkins/tools/org.jenkinsci.plugins.docker.commons.tools.DockerTool/docker/bin/docker"
         // DOCKER_HUB_USERNAME = credentials('docker-credentials').username
@@ -85,13 +86,16 @@ pipeline {
                     } else {
                         error 'Invalid selection'
                     }
+                    
+                    env.USER_INPUT = userInput
+
                 }
             }
         }
 
         stage('Conditional Stage') {
             when {
-                expression { userInput == 'Skip' }
+                expression { env.USER_INPUT == 'Skip' }
             }
             steps {
                 echo 'This stage will only run if user did not choose to skip'
@@ -104,7 +108,7 @@ pipeline {
                 kubeconfig = credentials('kubernetes-config')
             }
             when{
-                expression { userInput == 'Install' }
+                expression { env.USER_INPUT == 'Install' }
             }
             steps{
                 script{
@@ -136,7 +140,7 @@ pipeline {
         }
         stage ("Helm Charts Configuration"){
             when{
-                expression { userInput == 'Install' }
+                expression { env.USER_INPUT == 'Install' }
             }
             steps{
                 script {
@@ -167,7 +171,7 @@ pipeline {
         }
         stage("deploy installation") {
             when{
-                expression { userInput == 'Install' }
+                expression { env.USER_INPUT == 'Install' }
             }
             steps {
                 echo "deploy"

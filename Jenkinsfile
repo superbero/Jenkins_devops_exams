@@ -104,7 +104,7 @@ pipeline {
                 kubeconfig = credentials('kubernetes-config')
             }
             when{
-                expression { userInput('Install') }
+                expression { userInput == 'Install' }
             }
             steps{
                 script{
@@ -136,7 +136,7 @@ pipeline {
         }
         stage ("Helm Charts Configuration"){
             when{
-                expression { userInput ('Install') }
+                expression { userInput == 'Install' }
             }
             steps{
                 script {
@@ -167,7 +167,7 @@ pipeline {
         }
         stage("deploy installation") {
             when{
-                expression { userInput = 'Install' }
+                expression { userInput == 'Install' }
             }
             steps {
                 echo "deploy"

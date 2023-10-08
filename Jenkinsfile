@@ -87,9 +87,9 @@ pipeline {
                     //     error 'Invalid selection'
                     // }
                     
-                    echo "User selected: ${userInput}"
-                    $USER_INPUT = ${userInput}
-
+                   
+                    env.USER_INPUT = ${userInput}
+                    sh "echo 'User selected: ${env.USER_INPUT}'"
                 }
             }
         }

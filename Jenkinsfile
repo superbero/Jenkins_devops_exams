@@ -91,7 +91,7 @@ pipeline {
 
         stage('Conditional Stage') {
             when {
-                expression { userInput != 'Skip' }
+                expression { userInput == 'Skip' }
             }
             steps {
                 echo 'This stage will only run if user did not choose to skip'

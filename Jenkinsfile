@@ -98,13 +98,6 @@ pipeline {
                 // Add your stage steps here
             }
         }
-    }
-
-    post {
-        always {
-            // Clean up resources or perform additional tasks after the deployment
-        }
-    }
 
         stage("create namespace"){
             environment {
@@ -172,7 +165,7 @@ pipeline {
                 }
             }
         }
-        stage("deploy") {
+        stage("deploy installation") {
             steps {
                 echo "deploy"
             }

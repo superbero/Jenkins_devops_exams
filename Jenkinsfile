@@ -73,19 +73,19 @@ pipeline {
                         ]
                     )
                     
-                    if (userInput == 'Install') {
-                        echo 'User selected Install'
-                        // Add your Helm install command here
-                        // sh 'helm install my-release ./path/to/chart'
-                    } else if (userInput == 'Upgrade') {
-                        echo 'User selected Upgrade'
-                        // Add your Helm upgrade command here
-                        // sh 'helm upgrade my-release ./path/to/chart'
-                    } else if (userInput == 'Skip') {
-                        echo 'User selected to skip this stage'
-                    } else {
-                        error 'Invalid selection'
-                    }
+                    // if (userInput == 'Install') {
+                    //     echo 'User selected Install'
+                    //     // Add your Helm install command here
+                    //     // sh 'helm install my-release ./path/to/chart'
+                    // } else if (userInput == 'Upgrade') {
+                    //     echo 'User selected Upgrade'
+                    //     // Add your Helm upgrade command here
+                    //     // sh 'helm upgrade my-release ./path/to/chart'
+                    // } else if (userInput == 'Skip') {
+                    //     echo 'User selected to skip this stage'
+                    // } else {
+                    //     error 'Invalid selection'
+                    // }
                     
                     env.USER_INPUT = userInput
 
@@ -175,6 +175,15 @@ pipeline {
             }
             steps {
                 echo "deploy"
+                sh '''
+                namespaces=('dev' 'prod' 'staging')
+                for for namespace in "${namespaces[@]}"
+                do
+                echo "Deploying ${namespace} node"
+                $helm install jenkins-${namespace} jenkins-helm-${namespace} --values=jenkins-helm-${namespace}/values.yaml -n ${namespace}
+                $kubectl get all -n ${namespace}
+                done
+                '''
             }
         }
     }

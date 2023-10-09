@@ -99,7 +99,7 @@ pipeline {
                     for namespace in "${namespaces[@]}"
                     do
                         $kubectl get all -n ${namespace}
-                        rm -f jenkins-helm-${namespace}/templates/*
+                        rm -rf jenkins-helm-${namespace}/templates/*
                         cp -f values.yaml jenkins-helm-${namespace}/values.yaml
                         sed -i '' 's/namespace: dev/namespace: ${namespace}/g' jenkins-helm-${namespace}/values.yaml
                         cp -rf templates jenkins-helm-${namespace}/
@@ -214,7 +214,7 @@ pipeline {
                 echo "deploy"
                 sh '''
                 namespaces=('dev' 'prod' 'staging' 'QA')
-                for for namespace in "${namespaces[@]}"
+                for namespace in "${namespaces[@]}"
                 do
                 echo "Deploying ${namespace} node"
                 $helm install jenkins-${namespace} jenkins-helm-${namespace} --values=jenkins-helm-${namespace}/values.yaml -n ${namespace}

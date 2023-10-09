@@ -164,6 +164,7 @@ pipeline {
             // }
             steps{
                 script{
+                    echo "skip"
                     // sh '''
                     // set +e
                     
@@ -229,7 +230,7 @@ pipeline {
             steps {
                 echo "deploy"
                 sh '''
-                namespaces=('dev' 'prod' 'staging QA')
+                namespaces=('dev' 'prod' 'staging' 'QA')
                 for for namespace in "${namespaces[@]}"
                 do
                 echo "Deploying ${namespace} node"

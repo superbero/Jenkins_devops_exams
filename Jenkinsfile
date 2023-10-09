@@ -63,7 +63,7 @@ pipeline {
                 '''
             }
         }
-        stage('User Input') {
+        stage('Deploying') {
             steps {
                 script {
                     def userInput = input(
@@ -79,7 +79,6 @@ pipeline {
                         // sh 'helm install my-release ./path/to/chart'
                         sh '''
                     set +e
-                    
                     namespaces=('dev' 'staging' 'prod' 'QA')
                     echo 'create namespace dev prod staging QA'
                     for namespace in "${namespaces[@]}"
@@ -104,6 +103,14 @@ pipeline {
                         sed -i '' 's/namespace: dev/namespace: ${namespace}/g' jenkins-helm-${namespace}/values.yaml
                         cp -rf templates jenkins-helm-${namespace}/
                     done
+
+                    echo "Deploying"
+                    for namespace in "${namespaces[@]}"
+                    do
+                    echo "Deploying ${namespace} node"
+                    $helm install jenkins-${namespace} jenkins-helm-${namespace} --values=jenkins-helm-${namespace}/values.yaml -n ${namespace}
+                    $kubectl get all -n ${namespace}
+                    done
                     
                     git add .
                     git commit -m "Helm charts configuration"
@@ -114,114 +121,121 @@ pipeline {
                         echo 'User selected Upgrade'
                         // Add your Helm upgrade command here
                         // sh 'helm upgrade my-release ./path/to/chart'
+                        sh '''
+                        for namespace in "${namespaces[@]}"
+                        do
+                            echo "Deploying ${namespace} node"
+                            $helm upgrade jenkins-${namespace} jenkins-helm-${namespace} --values=jenkins-helm-${namespace}/values.yaml -n ${namespace}
+                            $kubectl get all -n ${namespace}
+                        done
+                        '''
                     } else if (userInput == 'Skip') {
                         echo 'User selected to skip this stage'
+                        echo 'Do nothing'
                     } else {
                         error 'Invalid selection'
                     }
-                    
-                   
-                    env.USER_INPUT = ${userInput}
                 }
-            }
-        }
-
-        stage('Conditional Stage') {
-            when {
-                expression { USER_INPUT == 'Skip' }
-            }
-            steps {
-                echo "user input: {env.USER_INPUT}"
-                echo 'This stage will only run if user did not choose to skip'
-                // Add your stage steps here
-            }
-        }
-
-        stage("create namespace"){
-            environment {
-                kubeconfig = credentials('kubernetes-config')
-            }
-            // when{
-            //     expression { env.USER_INPUT == 'Install' }
-                
-            // }
-            steps{
-                script{
-                    echo "skip"
-                    // sh '''
-                    // set +e
-                    
-                    // namespaces=('dev' 'staging' 'prod')
-                    // echo 'create namespace dev prod staging'
-                    // for namespace in "${namespaces[@]}"
-                    // do
-                    //     $kubectl get namespace $namespace
-                    //         if [[ $? -eq 0 ]]; then
-                    //             echo 'Deleting the ${namespace} namespace if exist'
-                    //             $kubectl delete -f kubernetes/namespaces/${namespace}.yml
-                    //             echo 'Recreate from new ... ${namespace}'
-                    //             $kubectl apply -f kubernetes/namespaces/${namespace}.yml
-                    //         else
-                    //             echo 'Create ${namespace} namespace'
-                    //             $kubectl apply -f kubernetes/namespaces/${namespace}.yml >2&1 /dev/null 
-                    //         fi
-                    // done
-
-                    // for namespace in "${namespaces[@]}"
-                    // do
-                    //     $kubectl get all -n ${namespace}
-                    // done
-                    // '''
-                }
-            }   
-        }
-        stage ("Helm Charts Configuration"){
-            when{
-                expression { env.USER_INPUT == 'Install' }
-            }
-            steps{
-                script {
-                    sh '''
-                    set +e
-                    // rm -rf jenkins-helm-dev/templates/*
-                    // cp -f values.yaml jenkins-helm-dev/values.yaml
-                    // cp -rf templates jenkins-helm-dev/
-
-                    // rm -f jenkins-helm-prod/templates/*
-                    // cp -f values.yaml jenkins-helm-prod/values.yaml
-                    // sed -i '' 's/namespace: dev/namespace: prod/g' jenkins-helm-prod/values.yaml
-                    // cp -rf templates jenkins-helm-prod/
-
-
-                    // rm -f jenkins-helm-staging/templates/*
-                    // cp -f values.yaml jenkins-helm-staging/values.yaml
-                    // sed -i '' 's/namespace: dev/namespace: staging/g' jenkins-helm-staging/values.yaml
-                    // cp -rf templates jenkins-helm-staging/
-
-
-                    // git add .
-                    // git commit -m "Helm charts configuration"
-                    // git push origin master
-                    '''
-                }
-            }
-        }
-        stage("deploy installation") {
-            when{
-                expression { env.USER_INPUT == 'Install' }
-            }
-            steps {
-                echo "deploy"
-                sh '''
-                namespaces=('dev' 'prod' 'staging' 'QA')
-                for namespace in "${namespaces[@]}"
-                do
-                echo "Deploying ${namespace} node"
-                $helm install jenkins-${namespace} jenkins-helm-${namespace} --values=jenkins-helm-${namespace}/values.yaml -n ${namespace}
-                $kubectl get all -n ${namespace}
-                done
-                '''
             }
         }
     }
+
+        // stage('Conditional Stage') {
+        //     when {
+        //         expression { USER_INPUT == 'Skip' }
+        //     }
+        //     steps {
+        //         echo "user input: {env.USER_INPUT}"
+        //         echo 'This stage will only run if user did not choose to skip'
+        //         // Add your stage steps here
+        //     }
+        // }
+
+        // stage("create namespace"){
+        //     environment {
+        //         kubeconfig = credentials('kubernetes-config')
+        //     }
+        //     // when{
+        //     //     expression { env.USER_INPUT == 'Install' }
+                
+        //     // }
+        //     steps{
+        //         script{
+        //             echo "skip"
+        //             // sh '''
+        //             // set +e
+                    
+        //             // namespaces=('dev' 'staging' 'prod')
+        //             // echo 'create namespace dev prod staging'
+        //             // for namespace in "${namespaces[@]}"
+        //             // do
+        //             //     $kubectl get namespace $namespace
+        //             //         if [[ $? -eq 0 ]]; then
+        //             //             echo 'Deleting the ${namespace} namespace if exist'
+        //             //             $kubectl delete -f kubernetes/namespaces/${namespace}.yml
+        //             //             echo 'Recreate from new ... ${namespace}'
+        //             //             $kubectl apply -f kubernetes/namespaces/${namespace}.yml
+        //             //         else
+        //             //             echo 'Create ${namespace} namespace'
+        //             //             $kubectl apply -f kubernetes/namespaces/${namespace}.yml >2&1 /dev/null 
+        //             //         fi
+        //             // done
+
+        //             // for namespace in "${namespaces[@]}"
+        //             // do
+        //             //     $kubectl get all -n ${namespace}
+        //             // done
+        //             // '''
+        //         }
+        //     }   
+        // }
+        // stage ("Helm Charts Configuration"){
+        //     when{
+        //         expression { env.USER_INPUT == 'Install' }
+        //     }
+        //     steps{
+        //         script {
+        //             sh '''
+        //             set +e
+        //             // rm -rf jenkins-helm-dev/templates/*
+        //             // cp -f values.yaml jenkins-helm-dev/values.yaml
+        //             // cp -rf templates jenkins-helm-dev/
+
+        //             // rm -f jenkins-helm-prod/templates/*
+        //             // cp -f values.yaml jenkins-helm-prod/values.yaml
+        //             // sed -i '' 's/namespace: dev/namespace: prod/g' jenkins-helm-prod/values.yaml
+        //             // cp -rf templates jenkins-helm-prod/
+
+
+        //             // rm -f jenkins-helm-staging/templates/*
+        //             // cp -f values.yaml jenkins-helm-staging/values.yaml
+        //             // sed -i '' 's/namespace: dev/namespace: staging/g' jenkins-helm-staging/values.yaml
+        //             // cp -rf templates jenkins-helm-staging/
+
+
+        //             // git add .
+        //             // git commit -m "Helm charts configuration"
+        //             // git push origin master
+        //             '''
+        //         }
+        //     }
+        // }
+        // stage("deploy installation") {
+        //     when{
+        //         expression { env.USER_INPUT == 'Install' }
+        //     }
+        //     steps {
+        //         echo "deploy"
+        //         sh '''
+        //         namespaces=('dev' 'prod' 'staging' 'QA')
+        //         for namespace in "${namespaces[@]}"
+        //         do
+        //         echo "Deploying ${namespace} node"
+        //         $helm install jenkins-${namespace} jenkins-helm-${namespace} --values=jenkins-helm-${namespace}/values.yaml -n ${namespace}
+        //         $kubectl get all -n ${namespace}
+        //         done
+        //         '''
+        //     }
+        // }
+    // }
 }

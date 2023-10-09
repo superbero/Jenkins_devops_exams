@@ -75,25 +75,23 @@ pipeline {
                     
                     if (userInput == 'Install') {
                         echo 'User selected Install'
-                        // Add your Helm install command here
-                        // sh 'helm install my-release ./path/to/chart'
                         sh '''
-                    set +e
-                    namespaces=('dev' 'staging' 'prod' 'QA')
-                    echo 'create namespace dev prod staging QA'
-                    for namespace in "${namespaces[@]}"
-                    do
-                        $kubectl get namespace $namespace
-                            if [[ $? -eq 0 ]]; then
-                                echo 'Deleting the ${namespace} namespace if exist'
-                                $kubectl delete -f kubernetes/namespaces/${namespace}.yml
-                                echo 'Recreate from new ... ${namespace}'
-                                $kubectl apply -f kubernetes/namespaces/${namespace}.yml
-                            else
-                                echo 'Create ${namespace} namespace'
-                                $kubectl apply -f kubernetes/namespaces/${namespace}.yml
-                            fi
-                    done
+                        set +e
+                        namespaces=('dev' 'staging' 'prod' 'QA')
+                        echo 'create namespace dev prod staging QA'
+                        for namespace in "${namespaces[@]}"
+                        do
+                            $kubectl get namespace $namespace
+                                if [[ $? -eq 0 ]]; then
+                                    echo 'Deleting the ${namespace} namespace if exist'
+                                    $kubectl delete -f kubernetes/namespaces/${namespace}.yml
+                                    echo 'Recreate from new ... ${namespace}'
+                                    $kubectl apply -f kubernetes/namespaces/${namespace}.yml
+                                else
+                                    echo 'Create ${namespace} namespace'
+                                    $kubectl apply -f kubernetes/namespaces/${namespace}.yml
+                                fi
+                        done
 
                     for namespace in "${namespaces[@]}"
                     do

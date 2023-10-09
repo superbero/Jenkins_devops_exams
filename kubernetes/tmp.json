@@ -5,18 +5,18 @@
         "annotations": {
             "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Namespace\",\"metadata\":{\"annotations\":{},\"name\":\"prod\"}}\n"
         },
-        "creationTimestamp": "2023-10-09T15:30:31Z",
-        "deletionTimestamp": "2023-10-09T15:43:15Z",
+        "creationTimestamp": "2023-10-09T15:46:35Z",
+        "deletionTimestamp": "2023-10-09T15:55:47Z",
         "labels": {
             "kubernetes.io/metadata.name": "prod"
         },
         "name": "prod",
-        "resourceVersion": "614077",
-        "uid": "4efd1641-4ce4-4824-8466-8e7088673d9f"
+        "resourceVersion": "614901",
+        "uid": "cfe8bc3c-0be0-4b84-b5a8-9e4cfb9db58e"
     },
     "spec": {
         "finalizers": [
-           
+         
         ]
     },
     "status": {

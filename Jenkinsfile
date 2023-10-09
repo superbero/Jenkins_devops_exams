@@ -81,7 +81,7 @@ pipeline {
                     set +e
                     
                     namespaces=('dev' 'staging' 'prod' 'QA')
-                    echo 'create namespace dev prod staging'
+                    echo 'create namespace dev prod staging QA'
                     for namespace in "${namespaces[@]}"
                     do
                         $kubectl get namespace $namespace
@@ -131,7 +131,7 @@ pipeline {
                 expression { USER_INPUT == 'Skip' }
             }
             steps {
-                echo "user input: ${env.USER_INPUT}"
+                echo "user input: {env.USER_INPUT}"
                 echo 'This stage will only run if user did not choose to skip'
                 // Add your stage steps here
             }

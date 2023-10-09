@@ -92,7 +92,7 @@ pipeline {
                                 $kubectl apply -f kubernetes/namespaces/${namespace}.yml
                             else
                                 echo 'Create ${namespace} namespace'
-                                $kubectl apply -f kubernetes/namespaces/${namespace}.yml >2&1 /dev/null 
+                                $kubectl apply -f kubernetes/namespaces/${namespace}.yml
                             fi
                     done
 

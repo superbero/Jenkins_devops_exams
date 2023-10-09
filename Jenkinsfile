@@ -3,6 +3,7 @@ pipeline {
     environment {
         DOCKER_HUB_REGISTRY = "docker.io"
         USER_INPUT=''
+        
         // docker = "/usr/local/bin/docker"
         // docker = "/Users/admin/.jenkins/tools/org.jenkinsci.plugins.docker.commons.tools.DockerTool/docker/bin/docker"
         // DOCKER_HUB_USERNAME = credentials('docker-credentials').username
@@ -64,6 +65,9 @@ pipeline {
             }
         }
         stage('Deploying') {
+            environment {
+                kubeconfig = credentials('kubeconfig')
+            }
             steps {
                 script {
                     def userInput = input(
@@ -77,6 +81,10 @@ pipeline {
                         echo 'User selected Install'
                         sh '''
                         // set -e
+                        rm -Rf .kube
+                        mkdir .kube
+                        ls
+                        cat $kubeconfig > .kube/config
                         namespaces=('dev' 'staging' 'prod' 'QA')
                         echo 'create namespace dev prod staging QA'
                         for namespace in "${namespaces[@]}"

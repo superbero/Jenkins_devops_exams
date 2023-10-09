@@ -104,24 +104,7 @@ pipeline {
                         sed -i '' 's/namespace: dev/namespace: ${namespace}/g' jenkins-helm-${namespace}/values.yaml
                         cp -rf templates jenkins-helm-${namespace}/
                     done
-
-                    // rm -rf jenkins-helm-dev/templates/*
-                    // cp -f values.yaml jenkins-helm-dev/values.yaml
-                    // cp -rf templates jenkins-helm-dev/
-
                     
-
-
-                    // rm -f jenkins-helm-staging/templates/*
-                    // cp -f values.yaml jenkins-helm-staging/values.yaml
-                    // sed -i '' 's/namespace: dev/namespace: staging/g' jenkins-helm-staging/values.yaml
-                    // cp -rf templates jenkins-helm-staging/
-
-                    // rm -f jenkins-helm-QA/templates/*
-                    // cp -f values.yaml jenkins-helm-QA/values.yaml
-                    // sed -i '' 's/namespace: dev/namespace: staging/g' jenkins-helm-QA/values.yaml
-                    // cp -rf templates jenkins-helm-QA/
-
                     git add .
                     git commit -m "Helm charts configuration"
                     git push origin master

@@ -80,7 +80,7 @@ pipeline {
                     if (userInput == 'Install') {
                         echo 'User selected Install'
                         sh '''
-                        // set -e
+                        # set -e
                         rm -Rf .kube
                         mkdir .kube
                         ls
@@ -90,15 +90,15 @@ pipeline {
                         for namespace in "${namespaces[@]}"
                         do
                             $kubectl get namespace $namespace
-                                // if [[ $? -eq 0 ]]; then
-                                //     echo 'Deleting the ${namespace} namespace if exist'
-                                //     $kubectl delete -f kubernetes/namespaces/${namespace}.yml
-                                //     echo 'Recreate from new ... ${namespace}'
+                                # if [[ $? -eq 0 ]]; then
+                                #     echo 'Deleting the ${namespace} namespace if exist'
+                                #     $kubectl delete -f kubernetes/namespaces/${namespace}.yml
+                                #    echo 'Recreate from new ... ${namespace}'
                                     $kubectl apply -f kubernetes/namespaces/${namespace}.yml
-                                // else
-                                //     echo 'Create ${namespace} namespace'
-                                //     $kubectl apply -f kubernetes/namespaces/${namespace}.yml
-                                // fi
+                                # else
+                                #    echo 'Create ${namespace} namespace'
+                                #     $kubectl apply -f kubernetes/namespaces/${namespace}.yml
+                                # fi
                         done
 
                     for namespace in "${namespaces[@]}"

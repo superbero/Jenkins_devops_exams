@@ -105,16 +105,18 @@ pipeline {
                         sh "sed -i 's/namespace: dev/namespace: ${namespace}/g' jenkins-helm-${namespace}/values.yaml"
                         sh "cp -rf templates jenkins-helm-${namespace}/"
                         }
-                git add .
-                git commit -m 'Helm charts configuration'
-                git push origin master
+                    sh '''
+                    git add .
+                    git commit -m 'Helm charts configuration'
+                    git push origin master
+                    '''
 
-                echo "Deploying"
+                    echo "Deploying"
 
-                namespaces.each { namespace ->
-                    echo "Deploying ${namespace} node"
-                    sh "$helm install jenkins-${namespace} jenkins-helm-${namespace}/ --values=jenkins-helm-${namespace}/values.yaml --namespace ${namespace}"
-                    sh "$kubectl get all -n ${namespace}"
+                    namespaces.each { namespace ->
+                        echo "Deploying ${namespace} node"
+                        sh "$helm install jenkins-${namespace} jenkins-helm-${namespace}/ --values=jenkins-helm-${namespace}/values.yaml --namespace ${namespace}"
+                        sh "$kubectl get all -n ${namespace}"
                 }
 
                 

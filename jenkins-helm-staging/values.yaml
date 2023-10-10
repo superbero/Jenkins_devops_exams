@@ -1,4 +1,4 @@
-namespace: dev
+namespace: staging
 
 configmap:
   postgres_cast:
@@ -68,10 +68,10 @@ volumes:
     accessModes: ReadWriteMany
 
     cast_db:
-      name: postgres-data-cast
+      name: staging-data-cast
     
     movie_db:
-      name: postgres-data-movie
+      name: staging-data-movie
 
 services:
   postgres_cast:

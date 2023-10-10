@@ -68,10 +68,10 @@ volumes:
     accessModes: ReadWriteMany
 
     cast_db:
-      name: postgres-data-cast
+      name: dev-data-cast
     
     movie_db:
-      name: postgres-data-movie
+      name: dev-data-movie
 
 services:
   postgres_cast:

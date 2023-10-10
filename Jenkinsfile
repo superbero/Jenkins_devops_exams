@@ -79,7 +79,6 @@ pipeline {
                     
                     if (userInput == 'Install') {
                         echo 'User selected Install'
-                        set +e
                         def namespaces = ['dev', 'staging', 'prod', 'QA']
                         echo 'create namespace dev prod staging QA'
                         for (namespace in namespaces) {

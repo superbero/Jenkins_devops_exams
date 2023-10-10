@@ -82,20 +82,20 @@ pipeline {
                         def namespaces = ['dev', 'staging', 'prod', 'QA']
                         echo 'create namespace dev prod staging QA'
                         for (namespace in namespaces) {
-                            sh "kubectl get namespace ${namespace}"
-                            if (currentBuild.resultIsBetterOrEqualTo('FAILURE')){
-                                 try {
-                                    sh "kubectl get namespace ${namespace}"
-                                } catch (Exception e) {
-                                echo "Namespace ${namespace} not found, creating..."
-                                currentBuild.result = 'UNSTABLE' // Set build result to UNSTABLE
+                            // sh "kubectl get namespace ${namespace}"
+                            // if (currentBuild.resultIsBetterOrEqualTo('FAILURE')){
+                            //      try {
+                            //         sh "kubectl get namespace ${namespace}"
+                            //     } catch (Exception e) {
+                            //     echo "Namespace ${namespace} not found, creating..."
+                            //     currentBuild.result = 'UNSTABLE' // Set build result to UNSTABLE
                                 sh "kubectl apply -f kubernetes/namespaces/${namespace}.yml"
-                                }
-                            } else {
-                                echo "Namespace ${namespace} exists, deleting and recreating..."
-                                sh "kubectl delete -f kubernetes/namespaces/${namespace}.yml"
-                                sh "kubectl apply -f kubernetes/namespaces/${namespace}.yml"
-                            }
+                                // }
+                            // } else {
+                            //     echo "Namespace ${namespace} exists, deleting and recreating..."
+                            //     sh "kubectl delete -f kubernetes/namespaces/${namespace}.yml"
+                            //     sh "kubectl apply -f kubernetes/namespaces/${namespace}.yml"
+                            // }
                         }
 
                         namespaces.each { namespace ->

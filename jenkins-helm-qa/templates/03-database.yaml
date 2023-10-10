@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ .Values.Deployment.movie_db.name}} #postgres-movie-db
-  namespace: dev
+  namespace: {{ .Values.namespace }}
 spec:
   selector:
     matchLabels:

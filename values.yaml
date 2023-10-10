@@ -58,7 +58,7 @@ volumes:
   accessModes: ReadWriteMany
   
   persistentvolume:
-    name: postgres-data-main
+    name: postgres-data-jenkins
     size: 10Gi
     volume_path: /Users/admin/data
    

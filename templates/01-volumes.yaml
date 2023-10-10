@@ -1,17 +1,17 @@
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: {{.Values.volumes.persistentvolume.name }}
-spec:
-  capacity:
-    storage: {{.Values.volumes.persistentvolume.size }}
-  volumeMode: Filesystem
-  hostPath:
-    path:  {{ .Values.volumes.persistentvolume.volume_path}}
-  accessModes:
-    - {{ .Values.volumes.accessModes}}
-  persistentVolumeReclaimPolicy: Recycle
-  storageClassName: {{ .Values.volumes.storageClassName }}
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: {{.Values.volumes.persistentvolume.name }}
+# spec:
+#   capacity:
+#     storage: {{.Values.volumes.persistentvolume.size }}
+#   volumeMode: Filesystem
+#   hostPath:
+#     path:  {{ .Values.volumes.persistentvolume.volume_path}}
+#   accessModes:
+#     - {{ .Values.volumes.accessModes}}
+#   persistentVolumeReclaimPolicy: Recycle
+#   storageClassName: {{ .Values.volumes.storageClassName }}
 ---
 
 apiVersion: v1

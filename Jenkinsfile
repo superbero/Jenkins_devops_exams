@@ -81,6 +81,8 @@ pipeline {
                     )
                     
                     if (userInput == 'Install') {
+                        echo 'Create Persistant Storage'
+                        sh "$kubectl apply -f kubernetes/volumes/persitentvolume.yml"
                         echo 'User selected Install'
                         def namespaces = ['dev', 'staging', 'prod', 'qa']
                         echo 'create namespace dev prod staging QA'

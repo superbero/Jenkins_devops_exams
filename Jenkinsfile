@@ -109,11 +109,7 @@ pipeline {
                         // sh "sed -i \"s/namespace: dev/namespace: ${namespace}/g\" jenkins-helm-${namespace}/values.yaml"
                         sh "cp -rf templates jenkins-helm-${namespace}/"
                         }
-                    sh '''
-                    git add .
-                    git commit -m 'Helm charts configuration'
-                    git push origin master
-                    '''
+                    
 
                     echo "Deploying"
 

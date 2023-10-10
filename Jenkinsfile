@@ -3,7 +3,6 @@ pipeline {
     environment {
         DOCKER_HUB_REGISTRY = "docker.io"
         USER_INPUT=''
-        
         // docker = "/usr/local/bin/docker"
         // docker = "/Users/admin/.jenkins/tools/org.jenkinsci.plugins.docker.commons.tools.DockerTool/docker/bin/docker"
         // DOCKER_HUB_USERNAME = credentials('docker-credentials').username
@@ -69,7 +68,7 @@ pipeline {
         }
         stage('Deploying') {
             environment {
-                kubeconfig = credentials('kubeconfig')
+                KUBECONFIG = credentials('kubeconfig')
             }
             steps {
                 script {

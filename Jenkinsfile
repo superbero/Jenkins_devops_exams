@@ -92,7 +92,7 @@ pipeline {
                             //     } catch (Exception e) {
                             //     echo "Namespace ${namespace} not found, creating..."
                             //     currentBuild.result = 'UNSTABLE' // Set build result to UNSTABLE
-                                sh "kubectl apply -f kubernetes/namespaces/${namespace}.yml"
+                                sh "$kubectl apply -f kubernetes/namespaces/${namespace}.yml"
                                 // }
                             // } else {
                             //     echo "Namespace ${namespace} exists, deleting and recreating..."
@@ -102,7 +102,7 @@ pipeline {
                         }
 
                         namespaces.each { namespace ->
-                        sh "kubectl get all -n ${namespace}"
+                        sh "$kubectl get all -n ${namespace}"
                         sh "rm -rf jenkins-helm-${namespace}/templates/*"
                         sh "cp -f values.yaml jenkins-helm-${namespace}/values.yaml"
                         sh "sed -i \"s/namespace: dev/namespace: ${namespace}/g\" jenkins-helm-${namespace}/values.yaml"
@@ -118,8 +118,8 @@ pipeline {
 
                     namespaces.each { namespace ->
                         echo "Deploying ${namespace} node"
-                        sh "helm install jenkins-${namespace} jenkins-helm-${namespace}/ -n ${namespace}"
-                        sh "kubectl get all -n ${namespace}"
+                        sh "$helm install jenkins-${namespace} jenkins-helm-${namespace}/ -n ${namespace}"
+                        sh "$kubectl get all -n ${namespace}"
                 }
 
                 

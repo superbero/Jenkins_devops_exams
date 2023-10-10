@@ -110,8 +110,8 @@ pipeline {
 
                 namespaces.each { namespace ->
                     echo "Deploying ${namespace} node"
-                    sh "${helm} install jenkins-${namespace} jenkins-helm-${namespace} --values=jenkins-helm-${namespace}/values.yaml -n ${namespace}"
-                    sh "${kubectl} get all -n ${namespace}"
+                    sh "helm install jenkins-${namespace} jenkins-helm-${namespace} --values=jenkins-helm-${namespace}/values.yaml -n ${namespace}"
+                    sh "$kubectl get all -n ${namespace}"
                 }
 
                 sh "git add ."

@@ -79,41 +79,41 @@ pipeline {
                     
                     if (userInput == 'Install') {
                         
-                        sh '''
-                        echo 'User selected Install'
-                        set +e
-                        namespaces=('dev' 'staging' 'prod' 'QA')
-                        echo 'create namespace dev prod staging QA'
-                        for namespace in "${namespaces[@]}"
-                        do
-                            $kubectl get namespace $namespace
-                                if [[ $? -eq 0 ]]; then
-                                    echo 'Deleting the ${namespace} namespace if exist'
-                                    $kubectl delete -f kubernetes/namespaces/${namespace}.yml
-                                    echo 'Recreate from new ... ${namespace}'
-                                    $kubectl apply -f kubernetes/namespaces/${namespace}.yml
-                                 else
-                                    echo 'Create ${namespace} namespace'
-                                    $kubectl apply -f kubernetes/namespaces/${namespace}.yml
-                                 fi
-                        done
+                    sh '''
+                    echo 'User selected Install'
+                    set +e
+                    namespaces=('dev' 'staging' 'prod' 'QA')
+                    echo 'create namespace dev prod staging QA'
+                    for namespace in "${namespaces[@]}"
+                    do
+                        $kubectl get namespace $namespace
+                            if [[ $? -eq 0 ]]; then
+                                echo 'Deleting the ${namespace} namespace if exist'
+                                $kubectl delete -f kubernetes/namespaces/${namespace}.yml
+                                echo 'Recreate from new ... ${namespace}'
+                                $kubectl apply -f kubernetes/namespaces/${namespace}.yml
+                            else
+                                echo 'Create ${namespace} namespace'
+                                $kubectl apply -f kubernetes/namespaces/${namespace}.yml
+                            fi
+                    done
 
-                        for namespace in "${namespaces[@]}"
-                        do
-                            $kubectl get all -n ${namespace}
-                            rm -rf jenkins-helm-${namespace}/templates/*
-                            cp -f values.yaml jenkins-helm-${namespace}/values.yaml
-                            sed -i '' 's/namespace: dev/namespace: ${namespace}/g' jenkins-helm-${namespace}/values.yaml
-                            cp -rf templates jenkins-helm-${namespace}/
-                        done
+                    for namespace in "${namespaces[@]}"
+                    do
+                        $kubectl get all -n ${namespace}
+                        rm -rf jenkins-helm-${namespace}/templates/*
+                        cp -f values.yaml jenkins-helm-${namespace}/values.yaml
+                        sed -i '' 's/namespace: dev/namespace: ${namespace}/g' jenkins-helm-${namespace}/values.yaml
+                        cp -rf templates jenkins-helm-${namespace}/
+                    done
 
-                        echo "Deploying"
-                        for namespace in "${namespaces[@]}"
-                        do
-                            echo "Deploying ${namespace} node"
-                            $helm install jenkins-${namespace} jenkins-helm-${namespace} --values=jenkins-helm-${namespace}/values.yaml -n ${namespace}
-                            $kubectl get all -n ${namespace}
-                        done
+                    echo "Deploying"
+                    for namespace in "${namespaces[@]}"
+                    do
+                        echo "Deploying ${namespace} node"
+                        $helm install jenkins-${namespace} jenkins-helm-${namespace} --values=jenkins-helm-${namespace}/values.yaml -n ${namespace}
+                        $kubectl get all -n ${namespace}
+                    done
                     
                     git add .
                     git commit -m "Helm charts configuration"

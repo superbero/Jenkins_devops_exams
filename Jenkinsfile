@@ -82,11 +82,11 @@ pipeline {
                     sh '''
                         echo 'User selected Install'
                         set +e
-                        namespaces=('dev' 'staging' 'prod' 'QA')
+                        namespaces = ('dev' 'staging' 'prod' 'QA')
                         echo 'create namespace dev prod staging QA'
-                    for namespace in "${namespaces[@]}"
-                    do
-                        $kubectl get namespace $namespace
+                        for namespace in "${namespaces[@]}"
+                        do
+                            $kubectl get namespace $namespace
                             if [[ $? -eq 0 ]]; then
                                 echo 'Deleting the ${namespace} namespace if exist'
                                 $kubectl delete -f kubernetes/namespaces/${namespace}.yml

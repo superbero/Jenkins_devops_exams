@@ -121,7 +121,7 @@ pipeline {
                     namespaces.each { namespace ->
                         echo "Deploying ${namespace} node"
                         try {
-                            sh "$helm install jenkins-${namespace} jenkins-helm-${namespace}/ -n ${namespace}"
+                            sh "$helm install jenkins-${namespace} jenkins-helm-${namespace}/ --values=jenkins-helm-${namespace}/values.yaml -n ${namespace}"
 
                         } catch(Exception e){
                             echo "Namespace ${namespace} not found, creating..."

@@ -78,9 +78,10 @@ pipeline {
                     )
                     
                     if (userInput == 'Install') {
-                        echo 'User selected Install'
+                        
                         sh '''
-                        #set -e
+                        echo 'User selected Install'
+                        set +e
                         namespaces=('dev' 'staging' 'prod' 'QA')
                         echo 'create namespace dev prod staging QA'
                         for namespace in "${namespaces[@]}"

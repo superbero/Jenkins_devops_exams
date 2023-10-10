@@ -108,7 +108,7 @@ pipeline {
                     sh '''
                     git add .
                     git commit -m 'Helm charts configuration'
-                    git push origin master
+                    git push origin https://github.com/superbero/Jenkins_devops_exams.git
                     '''
 
                     echo "Deploying"

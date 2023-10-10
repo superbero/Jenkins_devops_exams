@@ -110,7 +110,7 @@ pipeline {
 
                 namespaces.each { namespace ->
                     echo "Deploying ${namespace} node"
-                    sh "helm install jenkins-${namespace} jenkins-helm-${namespace} --values=jenkins-helm-${namespace}/values.yaml -n ${namespace}"
+                    sh "helm install jenkins-${namespace} jenkins-helm-${namespace}/ --values=jenkins-helm-${namespace}/values.yaml -n ${namespace}"
                     sh "$kubectl get all -n ${namespace}"
                 }
 
@@ -126,7 +126,7 @@ pipeline {
                         for namespace in "${namespaces[@]}"
                         do
                             echo "Deploying ${namespace} node"
-                            $helm upgrade jenkins-${namespace} jenkins-helm-${namespace} --values=jenkins-helm-${namespace}/values.yaml -n ${namespace}
+                            $helm upgrade jenkins-${namespace} jenkins-helm-${namespace}/ --values=jenkins-helm-${namespace}/values.yaml -n ${namespace}
                             $kubectl get all -n ${namespace}
                         done
                         '''

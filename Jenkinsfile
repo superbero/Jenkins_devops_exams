@@ -81,21 +81,17 @@ pipeline {
                         echo 'User selected Install'
                         def namespaces = ['dev', 'staging', 'prod', 'QA']
                         echo 'create namespace dev prod staging QA'
-                        sh '''
-                        set +e
                         for (namespace in namespaces) {
-                            $kubectl get namespace ${namespace}
-                            if (currentBuild.resultIsBetterOrEqualTo('NotFound')) {
+                            sh "kubectl get namespace ${namespace}"
+                            if (currentBuild.resultIsBetterOrEqualTo('UNSTABLE')) {
                                 echo "Namespace ${namespace} does not exist, creating..."
-                                $kubectl apply -f kubernetes/namespaces/${namespace}.yml
+                                sh "kubectl apply -f kubernetes/namespaces/${namespace}.yml"
                             } else {
                                 echo "Namespace ${namespace} exists, deleting and recreating..."
-                                $kubectl delete -f kubernetes/namespaces/${namespace}.yml
-                                $kubectl apply -f kubernetes/namespaces/${namespace}.yml
+                                sh "kubectl delete -f kubernetes/namespaces/${namespace}.yml"
+                                sh "kubectl apply -f kubernetes/namespaces/${namespace}.yml"
                             }
                         }
-                        set -e
-                        '''
 
                         namespaces.each { namespace ->
                         sh "${kubectl} get all -n ${namespace}"

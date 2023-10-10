@@ -107,11 +107,11 @@ pipeline {
                         sh "sed -i 's/namespace: dev/namespace: ${namespace}/g' jenkins-helm-${namespace}/values.yaml"
                         sh "cp -rf templates jenkins-helm-${namespace}/"
                         }
-                    // sh '''
-                    // git add .
-                    // git commit -m 'Helm charts configuration'
-                    // git push origin https://github.com/superbero/Jenkins_devops_exams.git --force
-                    // '''
+                    sh '''
+                    git add .
+                    git commit -m 'Helm charts configuration'
+                    git push origin master
+                    '''
 
                     echo "Deploying"
 

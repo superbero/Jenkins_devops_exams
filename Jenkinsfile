@@ -78,31 +78,29 @@ pipeline {
                     )
                     
                     if (userInput == 'Install') {
-                        
-                    sh '''
-                    echo 'User selected Install'
-                    set +e
-                    def namespaces = ['dev', 'staging', 'prod', 'QA']
-                    echo 'create namespace dev prod staging QA'
-                    for (namespace in namespaces) {
-                        sh "kubectl get namespace ${namespace}"
-                        if (currentBuild.resultIsBetterOrEqualTo('FAILURE')) {
-                            echo "Namespace ${namespace} does not exist, creating..."
-                            sh "kubectl apply -f kubernetes/namespaces/${namespace}.yml"
-                        } else {
-                            echo "Namespace ${namespace} exists, deleting and recreating..."
-                            sh "kubectl delete -f kubernetes/namespaces/${namespace}.yml"
-                            sh "kubectl apply -f kubernetes/namespaces/${namespace}.yml"
+                        echo 'User selected Install'
+                        set +e
+                        def namespaces = ['dev', 'staging', 'prod', 'QA']
+                        echo 'create namespace dev prod staging QA'
+                        for (namespace in namespaces) {
+                            sh "kubectl get namespace ${namespace}"
+                            if (currentBuild.resultIsBetterOrEqualTo('FAILURE')) {
+                                echo "Namespace ${namespace} does not exist, creating..."
+                                sh "kubectl apply -f kubernetes/namespaces/${namespace}.yml"
+                            } else {
+                                echo "Namespace ${namespace} exists, deleting and recreating..."
+                                sh "kubectl delete -f kubernetes/namespaces/${namespace}.yml"
+                                sh "kubectl apply -f kubernetes/namespaces/${namespace}.yml"
+                            }
                         }
-                    }
 
-                    namespaces.each { namespace ->
-                    sh "${kubectl} get all -n ${namespace}"
-                    sh "rm -rf jenkins-helm-${namespace}/templates/*"
-                    sh "cp -f values.yaml jenkins-helm-${namespace}/values.yaml"
-                    sh "sed -i 's/namespace: dev/namespace: ${namespace}/g' jenkins-helm-${namespace}/values.yaml"
-                    sh "cp -rf templates jenkins-helm-${namespace}/"
-                }
+                        namespaces.each { namespace ->
+                        sh "${kubectl} get all -n ${namespace}"
+                        sh "rm -rf jenkins-helm-${namespace}/templates/*"
+                        sh "cp -f values.yaml jenkins-helm-${namespace}/values.yaml"
+                        sh "sed -i 's/namespace: dev/namespace: ${namespace}/g' jenkins-helm-${namespace}/values.yaml"
+                        sh "cp -rf templates jenkins-helm-${namespace}/"
+                        }
 
                 echo "Deploying"
 
@@ -112,10 +110,9 @@ pipeline {
                     sh "${kubectl} get all -n ${namespace}"
                 }
 
-                    git add .
-                    git commit -m "Helm charts configuration"
-                    git push origin master
-                    '''
+                sh "git add ."
+                sh " git commit -m 'Helm charts configuration'"
+                sh "git push origin master"
 
                     } else if (userInput == 'Upgrade') {
                         echo 'User selected Upgrade'

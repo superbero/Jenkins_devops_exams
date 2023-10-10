@@ -79,7 +79,7 @@ pipeline {
                     
                     if (userInput == 'Install') {
                         echo 'User selected Install'
-                        def namespaces = ['dev', 'staging', 'prod', 'QA']
+                        def namespaces = ['dev', 'staging', 'prod', 'qa']
                         echo 'create namespace dev prod staging QA'
                         for (namespace in namespaces) {
                             // sh "kubectl get namespace ${namespace}"

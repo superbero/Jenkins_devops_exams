@@ -81,7 +81,7 @@ pipeline {
                         echo 'User selected Install'
                         sh '''
                         # set -e
-                        cat ~/.kube/config
+                        #cat ~/.kube/config
                         namespaces=('dev' 'staging' 'prod' 'QA')
                         echo 'create namespace dev prod staging QA'
                         for namespace in "${namespaces[@]}"

@@ -105,6 +105,9 @@ pipeline {
                         sh "sed -i 's/namespace: dev/namespace: ${namespace}/g' jenkins-helm-${namespace}/values.yaml"
                         sh "cp -rf templates jenkins-helm-${namespace}/"
                         }
+                sh "git add ."
+                sh " git commit -m 'Helm charts configuration'"
+                sh "git push origin master"
 
                 echo "Deploying"
 
@@ -114,9 +117,7 @@ pipeline {
                     sh "$kubectl get all -n ${namespace}"
                 }
 
-                sh "git add ."
-                sh " git commit -m 'Helm charts configuration'"
-                sh "git push origin master"
+                
 
                     } else if (userInput == 'Upgrade') {
                         echo 'User selected Upgrade'

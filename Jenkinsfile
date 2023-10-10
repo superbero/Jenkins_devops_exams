@@ -19,6 +19,7 @@ pipeline {
                     // git config --global user.name="Onesime Binko"
                     // git config --global user.email="onesimeking@gmail.com"
                 }
+                checkout scm
             }
         }
         stage("pre-build") {
@@ -104,14 +105,13 @@ pipeline {
                         sh "kubectl get all -n ${namespace}"
                         sh "rm -rf jenkins-helm-${namespace}/templates/*"
                         sh "cp -f values.yaml jenkins-helm-${namespace}/values.yaml"
-                        sh "sed -i 's/namespace: dev/namespace: ${namespace}/g' jenkins-helm-${namespace}/values.yaml"
+                        sh "sed -i \"s/namespace: dev/namespace: ${namespace}/g\" jenkins-helm-${namespace}/values.yaml"
                         sh "cp -rf templates jenkins-helm-${namespace}/"
                         }
-                    sh '''
                     git add .
                     git commit -m 'Helm charts configuration'
-                    git push 
-                    '''
+                    git push origin master
+                    
 
                     echo "Deploying"
 

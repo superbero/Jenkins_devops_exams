@@ -119,8 +119,14 @@ pipeline {
 
                     namespaces.each { namespace ->
                         echo "Deploying ${namespace} node"
-                        sh "$helm install jenkins-${namespace} jenkins-helm-${namespace}/ -n ${namespace}"
-                        sh "$kubectl get all -n ${namespace}"
+                        try {
+                            sh "$helm install jenkins-${namespace} jenkins-helm-${namespace}/ -n ${namespace}"
+
+                        } catch(Exception e){
+                            echo "Namespace ${namespace} not found, creating..."
+                            currentBuild.result = 'UNSTABLE' // Set build result to UNSTABLE
+                            sh "$kubectl get all -n ${namespace}"
+                        }
                 }
 
                 

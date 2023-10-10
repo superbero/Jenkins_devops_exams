@@ -75,7 +75,7 @@ pipeline {
                     def userInput = input(
                         id: 'userInput', message: 'Select an action:',
                         parameters: [
-                            choice(name: 'Action', choices: 'Install\nUpgrade', description: 'Select an action')
+                            choice(name: 'Action', choices: 'Install\nUpgrade\nSkip', description: 'Select an action')
                         ]
                     )
                     
@@ -145,7 +145,7 @@ pipeline {
                         '''
                     } else if (userInput == 'Skip') {
                         echo 'User selected to skip this stage'
-                        echo 'Do nothing'
+                        def scriptpath = ./deploy.sh
                     } else {
                         error 'Invalid selection'
                     }

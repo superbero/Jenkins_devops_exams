@@ -105,7 +105,8 @@ pipeline {
                         sh "$kubectl get all -n ${namespace}"
                         sh "rm -rf jenkins-helm-${namespace}/templates/*"
                         sh "cp -f values.yaml jenkins-helm-${namespace}/values.yaml"
-                        sh "sed -i \"s/namespace: dev/namespace: ${namespace}/g\" jenkins-helm-${namespace}/values.yaml"
+                        sh "sed -i '' 's/namespace: dev/namespace: ${namespace}/g' jenkins-helm-${namespace}/values.yaml"
+                        // sh "sed -i \"s/namespace: dev/namespace: ${namespace}/g\" jenkins-helm-${namespace}/values.yaml"
                         sh "cp -rf templates jenkins-helm-${namespace}/"
                         }
                     sh '''

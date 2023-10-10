@@ -1,27 +1,27 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: postgres-movie-configmap
+  name: {{ .Values.configmap.postgres_movie.name }} #postgres-movie-configmap
   labels:
-    app: postgres-movie-db
+    app: {{ .Values.Deployment.movie_db.name }} #postgres-movie-db
   namespace: {{ .Values.namespace }} #dev
 data:
-  POSTGRES_USER: "movie"
-  POSTGRES_PASSWORD: "password"
-  POSTGRES_DB: "movie_db"
+  POSTGRES_USER: {{ .Values.configmap.postgres_movie.POSTGRES_USER }} #"movie"
+  POSTGRES_PASSWORD: {{ .Values.configmap.postgres_movie.POSTGRES_PASSWORD}} #"password"
+  POSTGRES_DB: {{ .Values.configmap.postgres_movie.POSTGRES_DB }} #"movie_db"
  
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: postgres-cast-configmap
+  name: {{ .Values.configmap.postgres_cast.name }} #postgres-cast-configmap
   labels:
     app: postgres-cast-db
   namespace: {{ .Values.namespace }} #dev
 data:
-  POSTGRES_USER: "cast"
-  POSTGRES_PASSWORD: "password"
-  POSTGRES_DB: "cast_db"
+  POSTGRES_USER: {{ .Values.configmap.postgres_cast.POSTGRES_PASSWORD}} #"cast"
+  POSTGRES_PASSWORD: {{ .Values.configmap.postgres_cast.POSTGRES_PASSWORD }} #"password"
+  POSTGRES_DB: {{ .Values.configmap.postgres_cast.POSTGRES_DB }} #"cast_db"
 
 ---
 kind: ConfigMap

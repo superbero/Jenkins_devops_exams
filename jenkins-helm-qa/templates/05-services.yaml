@@ -1,0 +1,85 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-cast-service
+  namespace: {{ .Values.namespace }} #dev
+spec: 
+  selector:
+    app: postgres-cast-db
+  type: ClusterIP
+  ports:
+  - name: cast-service-tcp
+    protocol: TCP
+    port: 5432
+    targetPort: 5432
+    # If you set the `spec.type` field to `NodePort` and you want a specific port number,
+    # you can specify a value in the `spec.ports[*].nodePort` field.
+    #nodePort: 
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-movie-service
+  namespace: {{ .Values.namespace }} #dev
+spec: 
+  selector:
+    app: postgres-movie-db
+  type: ClusterIP
+  ports:
+  - name: movie-service-tcp
+    protocol: TCP
+    port: 5432
+    targetPort: 5432
+    # If you set the `spec.type` field to `NodePort` and you want a specific port number,
+    # you can specify a value in the `spec.ports[*].nodePort` field.
+    #nodePort: 
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name:  movie-service
+  namespace: {{ .Values.namespace }} #dev
+spec: 
+  selector:
+    app:  movie-svc-deploy
+  type:  ClusterIP
+  ports:
+  - name:  movie-service
+    port:  8000
+    targetPort:  8000
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: cast-db-service
+  namespace: {{ .Values.namespace}} #dev
+spec: 
+  selector:
+    app: cast-svc-deploy
+  type: ClusterIP
+  ports:
+  - name: cast-db-service
+    port: 8000
+    targetPort: 8000 
+    # If you set the `spec.type` field to `NodePort` and you want a specific port number,
+    # you can specify a value in the `spec.ports[*].nodePort` field.
+    #nodePort: 
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name:  nginx-service
+  namespace: {{ .Values.namespace}} #dev
+spec: 
+  selector:
+    app:  nginx
+  type:  LoadBalancer 
+  ports:
+  - name:  nginx-loadbalancer
+    port:  9090
+    protocol: TCP
+    targetPort:  9090

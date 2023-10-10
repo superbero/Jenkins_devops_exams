@@ -1,4 +1,4 @@
-namespace: staging
+namespace: dev
 
 configmap:
   postgres_cast:
@@ -58,8 +58,8 @@ volumes:
   accessModes: ReadWriteMany
   
   persistentvolume:
-    name: postgres-data
-    size: 5Gi
+    name: postgres-data-jenkins
+    size: 10Gi
     volume_path: /Users/admin/data
    
   persistentvolumeclaim:

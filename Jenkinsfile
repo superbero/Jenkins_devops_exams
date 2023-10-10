@@ -16,8 +16,8 @@ pipeline {
                 // Check out the Git repository
                 script {
                     git branch: 'master', url: 'https://github.com/superbero/Jenkins_devops_exams.git'
-                    git config --global user.name="Onesime Binko"
-                    git config --global user.email="onesimeking@gmail.com"
+                    // git config --global user.name="Onesime Binko"
+                    // git config --global user.email="onesimeking@gmail.com"
                 }
             }
         }

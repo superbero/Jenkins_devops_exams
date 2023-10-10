@@ -93,7 +93,7 @@ pipeline {
                             //     } catch (Exception e) {
                             //     echo "Namespace ${namespace} not found, creating..."
                             //     currentBuild.result = 'UNSTABLE' // Set build result to UNSTABLE
-                                sh "$kubectl apply -f kubernetes/namespaces/${namespace}.yml"
+                                sh "kubectl apply -f kubernetes/namespaces/${namespace}.yml"
                                 // }
                             // } else {
                             //     echo "Namespace ${namespace} exists, deleting and recreating..."

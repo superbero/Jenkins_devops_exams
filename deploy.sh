@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-namespaces=('dev' 'prod' 'staging' 'QA')
+namespaces=('dev' 'prod' 'staging' 'qa')
 
 for namespace in "${namespaces[@]}"
 do

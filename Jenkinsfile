@@ -145,7 +145,7 @@ pipeline {
                         '''
                     } else if (userInput == 'Skip') {
                         echo 'User selected to skip this stage'
-                        def scriptPath = "./deploy.sh"
+                        def scriptPath = "deploy.sh"
                         sh "./${scriptPath}"
 
                     } else {

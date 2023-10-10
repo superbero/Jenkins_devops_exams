@@ -80,41 +80,38 @@ pipeline {
                     if (userInput == 'Install') {
                         
                     sh '''
-                        echo 'User selected Install'
-                        set +e
-                        namespaces = ['dev' 'staging' 'prod' 'QA' ]
-                        echo 'create namespace dev prod staging QA'
-                        for namespace in ${namespaces[@]}
-                        do
-                            $kubectl get namespace $namespace
-                            if [[ $? -eq 0 ]]; then
-                                echo 'Deleting the ${namespace} namespace if exist'
-                                $kubectl delete -f kubernetes/namespaces/${namespace}.yml
-                                echo 'Recreate from new ... ${namespace}'
-                                $kubectl apply -f kubernetes/namespaces/${namespace}.yml
-                            else
-                                echo 'Create ${namespace} namespace'
-                                $kubectl apply -f kubernetes/namespaces/${namespace}.yml
-                            fi
-                        done
+                    echo 'User selected Install'
+                    set +e
+                    def namespaces = ['dev', 'staging', 'prod', 'QA']
+                    echo 'create namespace dev prod staging QA'
+                    for (namespace in namespaces) {
+                        sh "kubectl get namespace ${namespace}"
+                        if (currentBuild.resultIsBetterOrEqualTo('FAILURE')) {
+                            echo "Namespace ${namespace} does not exist, creating..."
+                            sh "kubectl apply -f kubernetes/namespaces/${namespace}.yml"
+                        } else {
+                            echo "Namespace ${namespace} exists, deleting and recreating..."
+                            sh "kubectl delete -f kubernetes/namespaces/${namespace}.yml"
+                            sh "kubectl apply -f kubernetes/namespaces/${namespace}.yml"
+                        }
+                    }
 
-                    for namespace in "${namespaces[@]}"
-                    do
-                        $kubectl get all -n ${namespace}
-                        rm -rf jenkins-helm-${namespace}/templates/*
-                        cp -f values.yaml jenkins-helm-${namespace}/values.yaml
-                        sed -i '' 's/namespace: dev/namespace: ${namespace}/g' jenkins-helm-${namespace}/values.yaml
-                        cp -rf templates jenkins-helm-${namespace}/
-                    done
+                    namespaces.each { namespace ->
+                    sh "${kubectl} get all -n ${namespace}"
+                    sh "rm -rf jenkins-helm-${namespace}/templates/*"
+                    sh "cp -f values.yaml jenkins-helm-${namespace}/values.yaml"
+                    sh "sed -i 's/namespace: dev/namespace: ${namespace}/g' jenkins-helm-${namespace}/values.yaml"
+                    sh "cp -rf templates jenkins-helm-${namespace}/"
+                }
 
-                    echo "Deploying"
-                    for namespace in "${namespaces[@]}"
-                    do
-                        echo "Deploying ${namespace} node"
-                        $helm install jenkins-${namespace} jenkins-helm-${namespace} --values=jenkins-helm-${namespace}/values.yaml -n ${namespace}
-                        $kubectl get all -n ${namespace}
-                    done
-                    
+                echo "Deploying"
+
+                namespaces.each { namespace ->
+                    echo "Deploying ${namespace} node"
+                    sh "${helm} install jenkins-${namespace} jenkins-helm-${namespace} --values=jenkins-helm-${namespace}/values.yaml -n ${namespace}"
+                    sh "${kubectl} get all -n ${namespace}"
+                }
+
                     git add .
                     git commit -m "Helm charts configuration"
                     git push origin master

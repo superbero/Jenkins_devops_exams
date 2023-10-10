@@ -73,17 +73,17 @@ pipeline {
                     def userInput = input(
                         id: 'userInput', message: 'Select an action:',
                         parameters: [
-                            choice(name: 'Action', choices: 'Install\nUpgrade\nSkip', description: 'Select an action')
+                            choice(name: 'Action', choices: 'Install\nUpgrade', description: 'Select an action')
                         ]
                     )
                     
                     if (userInput == 'Install') {
                         
                     sh '''
-                    echo 'User selected Install'
-                    set +e
-                    namespaces=('dev' 'staging' 'prod' 'QA')
-                    echo 'create namespace dev prod staging QA'
+                        echo 'User selected Install'
+                        set +e
+                        namespaces=('dev' 'staging' 'prod' 'QA')
+                        echo 'create namespace dev prod staging QA'
                     for namespace in "${namespaces[@]}"
                     do
                         $kubectl get namespace $namespace

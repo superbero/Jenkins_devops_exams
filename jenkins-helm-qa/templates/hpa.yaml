@@ -2,14 +2,14 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "jenkins-helm-QA.fullname" . }}
+  name: {{ include "jenkins-helm-qa.fullname" . }}
   labels:
-    {{- include "jenkins-helm-QA.labels" . | nindent 4 }}
+    {{- include "jenkins-helm-qa.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "jenkins-helm-QA.fullname" . }}
+    name: {{ include "jenkins-helm-qa.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:

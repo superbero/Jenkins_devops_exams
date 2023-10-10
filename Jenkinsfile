@@ -113,7 +113,6 @@ pipeline {
                     git add .
                     git commit -m 'Helm charts configuration'
                     git push origin master
-                    git pull
                     '''
 
                     echo "Deploying"

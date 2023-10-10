@@ -83,9 +83,14 @@ pipeline {
                         echo 'create namespace dev prod staging QA'
                         for (namespace in namespaces) {
                             sh "kubectl get namespace ${namespace}"
-                            if (currentBuild.resultIsBetterOrEqualTo('UNSTABLE')) {
-                                echo "Namespace ${namespace} does not exist, creating..."
+                            if (currentBuild.resultIsBetterOrEqualTo('FAILURE')){
+                                 try {
+                                    sh "kubectl get namespace ${namespace}"
+                                } catch (Exception e) {
+                                echo "Namespace ${namespace} not found, creating..."
+                                currentBuild.result = 'UNSTABLE' // Set build result to UNSTABLE
                                 sh "kubectl apply -f kubernetes/namespaces/${namespace}.yml"
+                                }
                             } else {
                                 echo "Namespace ${namespace} exists, deleting and recreating..."
                                 sh "kubectl delete -f kubernetes/namespaces/${namespace}.yml"

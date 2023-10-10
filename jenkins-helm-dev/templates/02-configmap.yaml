@@ -14,14 +14,14 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.configmap.postgres_movie.name }} #postgres-cast-configmap
+  name: {{ .Values.configmap.postgres_cast.name }} #postgres-cast-configmap
   labels:
     app: postgres-cast-db
   namespace: {{ .Values.namespace }} #dev
 data:
-  POSTGRES_USER: {{ .Values.configmap.postgres_movie.POSTGRES_PASSWORD}} #"cast"
-  POSTGRES_PASSWORD: {{ .Values.configmap.postgres_movie.POSTGRES_PASSWORD }} #"password"
-  POSTGRES_DB: {{ .Values.configmap.postgres_movie.POSTGRES_DB }} #"cast_db"
+  POSTGRES_USER: {{ .Values.configmap.postgres_cast.POSTGRES_PASSWORD}} #"cast"
+  POSTGRES_PASSWORD: {{ .Values.configmap.postgres_cast.POSTGRES_PASSWORD }} #"password"
+  POSTGRES_DB: {{ .Values.configmap.postgres_cast.POSTGRES_DB }} #"cast_db"
 
 ---
 kind: ConfigMap
